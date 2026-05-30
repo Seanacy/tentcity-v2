@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Mountain, Menu, X, Map, Info, Users, PlusCircle, Shield, LogOut } from "lucide-react";
+import Image from "next/image";
+import { Menu, X, Map, Info, Users, PlusCircle, Shield, LogOut } from "lucide-react";
 
 const navItems = [
   { label: "Map", icon: Map, href: "/" },
@@ -32,7 +33,7 @@ export default function Navbar() {
     <nav className="fixed top-0 left-0 right-0 z-50 h-14 bg-[#000000] border-b border-[#1a1a2e] flex items-center justify-center px-4">
       {/* Logo — centered */}
       <a href="/" className="flex items-center gap-2 select-none">
-        <Mountain className="w-6 h-6 text-[#4169E1]" />
+        <Image src="/tentcity-logo.png" alt="TentCity logo" width={32} height={32} />
         <span className="text-lg font-bold tracking-wide text-white">
           TentCity
         </span>
