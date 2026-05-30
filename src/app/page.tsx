@@ -334,7 +334,9 @@ export default function MapPage() {
           {renderSidebar()}
         </div>
         <div className="hidden md:block flex-1 relative">
-          <div ref={mapContainerRef} className="absolute inset-0" />
+          <div className="absolute inset-0">
+            <div ref={mapContainerRef} className="w-full h-full" />
+          </div>
         </div>
       </div>
 
