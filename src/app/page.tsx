@@ -299,8 +299,8 @@ export default function MapPage() {
     <div className="h-full flex flex-col pt-14">
       <Navbar />
 
-      {/* Filter bar: search + category pills */}
-      <div className="flex items-center gap-2 px-3 py-2 bg-[#0f1419] border-b border-[#2f3e50] overflow-hidden">
+      {/* Filter bar: search + category pills — floats over map on mobile */}
+      <div className="flex items-center gap-2 px-3 py-2 bg-transparent md:bg-[#0f1419] md:border-b md:border-[#2f3e50] overflow-visible absolute md:relative top-14 md:top-auto left-0 right-0 z-30">
         <SearchBar
           suggestions={searchSuggestions}
           onSearch={handleSearch}
@@ -339,7 +339,7 @@ export default function MapPage() {
         {/* List toggle button — mobile only */}
         <button
           onClick={() => setShowListPanel((p) => !p)}
-          className="md:hidden absolute top-3 left-3 z-20 flex items-center gap-2 px-3 py-2 rounded-lg bg-[#0f1419]/90 backdrop-blur-sm border border-[#2f3e50] text-white text-sm shadow-lg"
+          className="md:hidden absolute top-12 left-3 z-20 flex items-center gap-2 px-3 py-2 rounded-lg bg-[#0f1419]/90 backdrop-blur-sm border border-[#2f3e50] text-white text-sm shadow-lg"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
           {locations.length} Locations
