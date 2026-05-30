@@ -29,7 +29,7 @@ export default function CategoryPills({
           <button
             key={cat.id}
             onClick={() => onToggle(cat.id)}
-            className="flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 border whitespace-nowrap"
+            className="flex-shrink-0 px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 border whitespace-nowrap"
             style={
               isSelected
                 ? {
@@ -38,7 +38,7 @@ export default function CategoryPills({
                     color: "#ffffff",
                   }
                 : {
-                    backgroundColor: "#0f1419",
+                    backgroundColor: "#000000",
                     borderColor: cat.color,
                     color: cat.color,
                   }

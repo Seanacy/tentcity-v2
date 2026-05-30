@@ -15,11 +15,11 @@ export default function LocationCard({
   onDetails,
 }: LocationCardProps) {
   const primaryCategory = location.categories?.[0];
-  const borderColor = primaryCategory?.color ?? "#5ba3a8";
+  const borderColor = primaryCategory?.color ?? "#4169E1";
 
   return (
     <div
-      className="bg-[#1e2a3a] rounded-xl overflow-hidden border-l-4 transition-transform hover:scale-[1.01]"
+      className="bg-[#111111] rounded-xl overflow-hidden border-l-4 transition-transform hover:scale-[1.01]"
       style={{ borderLeftColor: borderColor }}
     >
       <div className="p-4">
@@ -30,15 +30,15 @@ export default function LocationCard({
 
         {/* Description */}
         {location.description && (
-          <p className="text-xs text-[#8899a6] leading-relaxed mb-2 line-clamp-2">
+          <p className="text-xs text-[#888888] leading-relaxed mb-2 line-clamp-2">
             {location.description}
           </p>
         )}
 
         {/* Address */}
         <div className="flex items-start gap-1.5 mb-3">
-          <MapPin className="w-3.5 h-3.5 text-[#5ba3a8] mt-0.5 flex-shrink-0" />
-          <span className="text-xs text-[#8899a6]">{location.address}</span>
+          <MapPin className="w-3.5 h-3.5 text-[#4169E1] mt-0.5 flex-shrink-0" />
+          <span className="text-xs text-[#888888]">{location.address}</span>
         </div>
 
         {/* Category tags */}
@@ -64,14 +64,14 @@ export default function LocationCard({
         <div className="flex gap-2">
           <button
             onClick={() => onDirections(location)}
-            className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-[#2a3a4e] hover:bg-[#354a5e] text-xs text-[#5ba3a8] font-medium transition-colors"
+            className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-[#1a1a2e] hover:bg-[#252540] text-xs text-[#4169E1] font-medium transition-colors"
           >
             <Navigation className="w-3.5 h-3.5" />
             Directions
           </button>
           <button
             onClick={() => onDetails(location)}
-            className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-[#5ba3a8] hover:bg-[#4a9298] text-xs text-white font-medium transition-colors"
+            className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-[#4169E1] hover:bg-[#3457C9] text-xs text-white font-medium transition-colors"
           >
             Details
             <ChevronRight className="w-3.5 h-3.5" />

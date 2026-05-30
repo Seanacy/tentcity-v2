@@ -5,20 +5,20 @@ import { ArrowRight, MapPin, Code, Heart, Lightbulb } from "lucide-react";
 
 export default function FoundersPage() {
   return (
-    <div className="min-h-screen bg-[#0f1419]">
+    <div className="min-h-screen bg-[#000000]">
       <Navbar />
 
       {/* Hero Section */}
       <section className="relative pt-14">
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0f1419] via-[#131d27] to-[#0f1419] pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#000000] via-[#050505] to-[#000000] pointer-events-none" />
         <div className="relative max-w-4xl mx-auto px-6 py-20 text-center">
-          <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#5ba3a8] mb-4">
+          <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#4169E1] mb-4">
             THE PEOPLE BEHIND THE PLATFORM
           </p>
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight mb-6">
             Our Founders
           </h1>
-          <p className="text-[#8899a6] max-w-xl mx-auto leading-relaxed">
+          <p className="text-[#888888] max-w-xl mx-auto leading-relaxed">
             TentCity was built by people who believe technology should serve
             those who need it most. Meet the team working to connect
             Minneapolis&apos;s most vulnerable residents with critical resources.
@@ -28,12 +28,12 @@ export default function FoundersPage() {
 
       {/* Founder Card */}
       <section className="max-w-3xl mx-auto px-6 py-16">
-        <div className="bg-[#1e2a3a] rounded-xl border border-[#2f3e50] overflow-hidden">
+        <div className="bg-[#111111] rounded-xl border border-[#1a1a2e] overflow-hidden">
           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-8 p-8">
             {/* Avatar */}
             <div className="flex-shrink-0">
-              <div className="w-28 h-28 rounded-full bg-[#5ba3a8] flex items-center justify-center">
-                <span className="text-3xl font-bold text-[#0f1419] select-none">
+              <div className="w-28 h-28 rounded-full bg-[#4169E1] flex items-center justify-center">
+                <span className="text-3xl font-bold text-[#000000] select-none">
                   JP
                 </span>
               </div>
@@ -44,10 +44,10 @@ export default function FoundersPage() {
               <h2 className="text-2xl font-bold text-white mb-1">
                 Jermaine Patterson
               </h2>
-              <p className="text-[#5ba3a8] font-medium mb-4">
+              <p className="text-[#4169E1] font-medium mb-4">
                 Founder &amp; Developer
               </p>
-              <p className="text-[#8899a6] leading-relaxed mb-4">
+              <p className="text-[#888888] leading-relaxed mb-4">
                 Jermaine founded TentCity out of a deep commitment to the
                 Minneapolis community and a belief that the right technology
                 can make life-saving resources easier to find. Drawing on
@@ -56,7 +56,7 @@ export default function FoundersPage() {
                 food, and social-service information directly into the hands
                 of those who need it.
               </p>
-              <p className="text-[#8899a6] leading-relaxed">
+              <p className="text-[#888888] leading-relaxed">
                 As both the product visionary and the lead engineer, Jermaine
                 oversees every layer of TentCity — from the AI-powered
                 resource discovery pipeline to the map interface used by
@@ -73,7 +73,7 @@ export default function FoundersPage() {
           <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">
             Our Vision
           </h2>
-          <p className="text-[#8899a6] max-w-xl mx-auto leading-relaxed">
+          <p className="text-[#888888] max-w-xl mx-auto leading-relaxed">
             TentCity started in Minneapolis, but the mission doesn&apos;t
             stop here. We&apos;re building toward a future where no one
             has to wonder where their next meal or safe bed is coming from.
@@ -105,13 +105,13 @@ export default function FoundersPage() {
           ].map((item) => (
             <div
               key={item.title}
-              className="bg-[#1e2a3a] rounded-xl p-6 border border-[#2f3e50]"
+              className="bg-[#111111] rounded-xl p-6 border border-[#1a1a2e]"
             >
-              <item.icon className="w-6 h-6 text-[#5ba3a8] mb-3" />
+              <item.icon className="w-6 h-6 text-[#4169E1] mb-3" />
               <h3 className="text-lg font-bold text-white mb-2">
                 {item.title}
               </h3>
-              <p className="text-sm text-[#8899a6] leading-relaxed">
+              <p className="text-sm text-[#888888] leading-relaxed">
                 {item.desc}
               </p>
             </div>
@@ -124,13 +124,13 @@ export default function FoundersPage() {
         <h2 className="text-2xl sm:text-3xl font-bold text-white italic mb-6">
           Every person deserves to know where help is
         </h2>
-        <p className="text-[#8899a6] max-w-lg mx-auto mb-8 leading-relaxed">
+        <p className="text-[#888888] max-w-lg mx-auto mb-8 leading-relaxed">
           Explore the TentCity map to find shelters, food programs, and
           social services near you — or help us grow by spreading the word.
         </p>
         <a
           href="/"
-          className="inline-flex items-center gap-2 px-6 py-3 bg-white text-[#0f1419] font-semibold rounded-lg hover:bg-gray-200 transition-colors"
+          className="inline-flex items-center gap-2 px-6 py-3 bg-white text-[#000000] font-semibold rounded-lg hover:bg-gray-200 transition-colors"
         >
           Back to the map
           <ArrowRight className="w-4 h-4" />

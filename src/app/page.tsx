@@ -241,17 +241,17 @@ export default function MapPage() {
 
     return (
       <div className="flex flex-col h-full">
-        <div className="p-3 border-b border-[#2f3e50] flex items-center justify-between">
+        <div className="p-3 border-b border-[#1a1a2e] flex items-center justify-between">
           <span className="font-semibold text-sm">Locations</span>
-          <span className="text-xs text-[#8899a6]">{totalResults} results</span>
+          <span className="text-xs text-[#888888]">{totalResults} results</span>
         </div>
         <div className="flex-1 overflow-y-auto">
           {loading ? (
             <div className="flex items-center justify-center h-32">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#5ba3a8]" />
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#4169E1]" />
             </div>
           ) : locations.length === 0 && bridgeWorkTasks.length === 0 ? (
-            <div className="p-6 text-center text-[#8899a6]">
+            <div className="p-6 text-center text-[#888888]">
               No locations found.
             </div>
           ) : (
@@ -270,13 +270,13 @@ export default function MapPage() {
 
               {bridgeWorkTasks.length > 0 && (
                 <>
-                  <div className="px-4 py-2 mt-2 border-t border-[#2f3e50]">
+                  <div className="px-4 py-2 mt-2 border-t border-[#1a1a2e]">
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 rounded-full bg-[#F39C12]" />
                       <span className="text-xs font-semibold text-[#F39C12] uppercase tracking-wider">
                         BridgeWork
                       </span>
-                      <span className="text-[10px] text-[#8899a6]">
+                      <span className="text-[10px] text-[#888888]">
                         {bridgeWorkTasks.length} cash tasks
                       </span>
                     </div>
@@ -300,7 +300,7 @@ export default function MapPage() {
       <Navbar />
 
       {/* Filter bar: search + category pills — floats over map on mobile */}
-      <div className="flex items-center gap-2 px-3 py-2 bg-transparent md:bg-[#0f1419] md:border-b md:border-[#2f3e50] overflow-visible absolute md:relative top-14 md:top-auto left-0 right-0 z-30">
+      <div className="flex items-center gap-2 px-3 py-2 bg-transparent md:bg-[#000000] md:border-b md:border-[#1a1a2e] overflow-visible absolute md:relative top-14 md:top-auto left-0 right-0 z-30">
         <SearchBar
           suggestions={searchSuggestions}
           onSearch={handleSearch}
@@ -339,7 +339,7 @@ export default function MapPage() {
         {/* List toggle button — mobile only */}
         <button
           onClick={() => setShowListPanel((p) => !p)}
-          className="md:hidden absolute top-12 left-3 z-20 flex items-center gap-2 px-3 py-2 rounded-lg bg-[#0f1419]/90 backdrop-blur-sm border border-[#2f3e50] text-white text-sm shadow-lg"
+          className="md:hidden absolute top-12 left-3 z-20 flex items-center gap-2 px-3 py-2 rounded-lg bg-[#000000]/90 backdrop-blur-sm border border-[#1a1a2e] text-white text-sm shadow-lg"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
           {locations.length} Locations
@@ -349,7 +349,7 @@ export default function MapPage() {
         <div
           className={`
             absolute inset-y-0 left-0 w-[85vw] max-w-[380px] z-30
-            bg-[#0f1419] border-r border-[#2f3e50]
+            bg-[#000000] border-r border-[#1a1a2e]
             transform transition-transform duration-300 ease-in-out
             ${showListPanel ? "translate-x-0" : "-translate-x-full"}
             md:relative md:translate-x-0 md:w-[380px] md:max-w-none md:order-first
@@ -359,7 +359,7 @@ export default function MapPage() {
           {/* Close button — mobile only */}
           <button
             onClick={() => setShowListPanel(false)}
-            className="md:hidden absolute top-3 right-3 z-10 p-1 rounded-full bg-[#1e2a3a] text-white"
+            className="md:hidden absolute top-3 right-3 z-10 p-1 rounded-full bg-[#111111] text-white"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
           </button>

@@ -29,10 +29,10 @@ export default function Navbar() {
   }, [menuOpen]);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 h-14 bg-[#0f1419] border-b border-[#2f3e50] flex items-center justify-center px-4">
+    <nav className="fixed top-0 left-0 right-0 z-50 h-14 bg-[#000000] border-b border-[#1a1a2e] flex items-center justify-center px-4">
       {/* Logo — centered */}
       <a href="/" className="flex items-center gap-2 select-none">
-        <Mountain className="w-6 h-6 text-[#5ba3a8]" />
+        <Mountain className="w-6 h-6 text-[#4169E1]" />
         <span className="text-lg font-bold tracking-wide text-white">
           TentCity
         </span>
@@ -42,7 +42,7 @@ export default function Navbar() {
       <div className="absolute right-4" ref={menuRef}>
         <button
           onClick={() => setMenuOpen((prev) => !prev)}
-          className="p-2 rounded-lg hover:bg-[#1e2a3a] transition-colors"
+          className="p-2 rounded-lg hover:bg-[#111111] transition-colors"
           aria-label={menuOpen ? "Close menu" : "Open menu"}
         >
           {menuOpen ? (
@@ -54,15 +54,15 @@ export default function Navbar() {
 
         {/* Dropdown */}
         {menuOpen && (
-          <div className="absolute right-0 top-12 w-52 bg-[#1e2a3a] border border-[#2f3e50] rounded-xl shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-2">
+          <div className="absolute right-0 top-12 w-52 bg-[#111111] border border-[#1a1a2e] rounded-xl shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-2">
             {navItems.map((item) => (
               <a
                 key={item.label}
                 href={item.href}
                 onClick={() => setMenuOpen(false)}
-                className="flex items-center gap-3 px-4 py-3 text-sm text-[#c8d6e0] hover:bg-[#2a3a4e] hover:text-white transition-colors"
+                className="flex items-center gap-3 px-4 py-3 text-sm text-[#cccccc] hover:bg-[#1a1a2e] hover:text-white transition-colors"
               >
-                <item.icon className="w-4 h-4 text-[#5ba3a8]" />
+                <item.icon className="w-4 h-4 text-[#4169E1]" />
                 {item.label}
               </a>
             ))}

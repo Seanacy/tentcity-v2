@@ -42,11 +42,11 @@ export default function CategoriesPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <div>
           <h2 className="text-lg font-semibold text-white">All Categories</h2>
-          <p className="text-sm text-[#8899a6] mt-0.5">
+          <p className="text-sm text-[#888888] mt-0.5">
             {categories.length} categor{categories.length === 1 ? "y" : "ies"} configured
           </p>
         </div>
-        <button className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#5ba3a8] hover:bg-[#4a9298] text-sm font-medium text-white transition-colors self-start sm:self-auto">
+        <button className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#4169E1] hover:bg-[#3457C9] text-sm font-medium text-white transition-colors self-start sm:self-auto">
           <Plus className="w-4 h-4" />
           New Category
         </button>
@@ -55,16 +55,16 @@ export default function CategoriesPage() {
       {/* Loading state */}
       {loading && (
         <div className="flex items-center justify-center py-20">
-          <Loader2 className="w-6 h-6 text-[#5ba3a8] animate-spin" />
-          <span className="ml-3 text-sm text-[#8899a6]">Loading categories...</span>
+          <Loader2 className="w-6 h-6 text-[#4169E1] animate-spin" />
+          <span className="ml-3 text-sm text-[#888888]">Loading categories...</span>
         </div>
       )}
 
       {/* Empty state */}
       {!loading && categories.length === 0 && (
         <div className="text-center py-20">
-          <FolderOpen className="w-10 h-10 text-[#2f3e50] mx-auto mb-3" />
-          <p className="text-sm text-[#8899a6]">No categories found.</p>
+          <FolderOpen className="w-10 h-10 text-[#1a1a2e] mx-auto mb-3" />
+          <p className="text-sm text-[#888888]">No categories found.</p>
         </div>
       )}
 
@@ -74,7 +74,7 @@ export default function CategoriesPage() {
           {categories.map((cat) => (
             <div
               key={cat.id}
-              className="bg-[#1e2a3a] rounded-xl border border-[#2f3e50] p-5"
+              className="bg-[#111111] rounded-xl border border-[#1a1a2e] p-5"
             >
               <div className="flex items-start gap-4">
                 {/* Color circle */}
@@ -89,7 +89,7 @@ export default function CategoriesPage() {
                     {cat.name}
                   </h3>
                   {cat.description && (
-                    <p className="text-sm text-[#8899a6] leading-relaxed mb-3">
+                    <p className="text-sm text-[#888888] leading-relaxed mb-3">
                       {cat.description}
                     </p>
                   )}
@@ -97,16 +97,16 @@ export default function CategoriesPage() {
                   {/* Meta row */}
                   <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs mb-4">
                     <div>
-                      <span className="text-[#8899a6] uppercase font-medium tracking-wider">
+                      <span className="text-[#888888] uppercase font-medium tracking-wider">
                         Icon
                       </span>{" "}
-                      <span className="text-[#c8d6e0]">{cat.icon_name}</span>
+                      <span className="text-[#cccccc]">{cat.icon_name}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="text-[#8899a6] uppercase font-medium tracking-wider">
+                      <span className="text-[#888888] uppercase font-medium tracking-wider">
                         Color
                       </span>
-                      <span className="text-[#c8d6e0]">{cat.color}</span>
+                      <span className="text-[#cccccc]">{cat.color}</span>
                       <span
                         className="inline-block w-3 h-3 rounded-sm"
                         style={{ backgroundColor: cat.color }}
@@ -115,8 +115,8 @@ export default function CategoriesPage() {
                   </div>
 
                   {/* Actions */}
-                  <div className="flex gap-3 pt-3 border-t border-[#2f3e50]">
-                    <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#2a3a4e] hover:bg-[#354a5e] text-sm font-medium text-[#c8d6e0] transition-colors">
+                  <div className="flex gap-3 pt-3 border-t border-[#1a1a2e]">
+                    <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1a1a2e] hover:bg-[#252540] text-sm font-medium text-[#cccccc] transition-colors">
                       <Pencil className="w-3.5 h-3.5" />
                       Edit
                     </button>

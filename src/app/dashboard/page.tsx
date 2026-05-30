@@ -21,7 +21,7 @@ const stats = [
     change: "+12%",
     up: true,
     icon: MapPin,
-    iconColor: "#5ba3a8",
+    iconColor: "#4169E1",
   },
   {
     label: "Active Services",
@@ -82,7 +82,7 @@ const recentActivity = [
   },
   {
     icon: Plus,
-    color: "#5ba3a8",
+    color: "#4169E1",
     text: "New location added: Downtown Food Pantry",
     time: "5 hours ago",
   },
@@ -107,11 +107,11 @@ export default function DashboardPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <div>
           <h1 className="text-2xl font-bold text-white">Dashboard</h1>
-          <p className="text-sm text-[#8899a6] mt-1">
+          <p className="text-sm text-[#888888] mt-1">
             Welcome back! Here&apos;s an overview of your resources.
           </p>
         </div>
-        <button className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#5ba3a8] hover:bg-[#4a9298] text-sm font-medium text-white transition-colors self-start sm:self-auto">
+        <button className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#4169E1] hover:bg-[#3457C9] text-sm font-medium text-white transition-colors self-start sm:self-auto">
           <Plus className="w-4 h-4" />
           Add Location
         </button>
@@ -122,7 +122,7 @@ export default function DashboardPage() {
         {stats.map((stat) => (
           <div
             key={stat.label}
-            className="bg-[#1e2a3a] rounded-xl border border-[#2f3e50] p-5"
+            className="bg-[#111111] rounded-xl border border-[#1a1a2e] p-5"
           >
             <div className="flex items-center justify-between mb-3">
               <div
@@ -148,7 +148,7 @@ export default function DashboardPage() {
               </div>
             </div>
             <p className="text-2xl font-bold text-white">{stat.value}</p>
-            <p className="text-xs text-[#8899a6] mt-1">{stat.label}</p>
+            <p className="text-xs text-[#888888] mt-1">{stat.label}</p>
           </div>
         ))}
       </div>
@@ -156,8 +156,8 @@ export default function DashboardPage() {
       {/* Bottom grid: table + activity */}
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
         {/* Recent Locations table */}
-        <div className="lg:col-span-3 bg-[#1e2a3a] rounded-xl border border-[#2f3e50] overflow-hidden">
-          <div className="px-5 py-4 border-b border-[#2f3e50]">
+        <div className="lg:col-span-3 bg-[#111111] rounded-xl border border-[#1a1a2e] overflow-hidden">
+          <div className="px-5 py-4 border-b border-[#1a1a2e]">
             <h2 className="text-base font-semibold text-white">
               Recent Locations
             </h2>
@@ -165,7 +165,7 @@ export default function DashboardPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-[#8899a6] text-xs uppercase tracking-wider">
+                <tr className="text-[#888888] text-xs uppercase tracking-wider">
                   <th className="text-left px-5 py-3 font-medium">Name</th>
                   <th className="text-left px-5 py-3 font-medium">Category</th>
                   <th className="text-left px-5 py-3 font-medium">Status</th>
@@ -176,7 +176,7 @@ export default function DashboardPage() {
                 {recentLocations.map((loc) => (
                   <tr
                     key={loc.name}
-                    className="border-t border-[#2f3e50] hover:bg-[#243040] transition-colors"
+                    className="border-t border-[#1a1a2e] hover:bg-[#1a1a2e] transition-colors"
                   >
                     <td className="px-5 py-3.5 font-medium text-white">
                       {loc.name}
@@ -203,7 +203,7 @@ export default function DashboardPage() {
                         {loc.status}
                       </span>
                     </td>
-                    <td className="px-5 py-3.5 text-[#8899a6]">{loc.added}</td>
+                    <td className="px-5 py-3.5 text-[#888888]">{loc.added}</td>
                   </tr>
                 ))}
               </tbody>
@@ -212,8 +212,8 @@ export default function DashboardPage() {
         </div>
 
         {/* Recent Activity feed */}
-        <div className="lg:col-span-2 bg-[#1e2a3a] rounded-xl border border-[#2f3e50] overflow-hidden">
-          <div className="px-5 py-4 border-b border-[#2f3e50]">
+        <div className="lg:col-span-2 bg-[#111111] rounded-xl border border-[#1a1a2e] overflow-hidden">
+          <div className="px-5 py-4 border-b border-[#1a1a2e]">
             <h2 className="text-base font-semibold text-white">
               Recent Activity
             </h2>
@@ -231,12 +231,12 @@ export default function DashboardPage() {
                   />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-sm text-[#c8d6e0] leading-snug">
+                  <p className="text-sm text-[#cccccc] leading-snug">
                     {item.text}
                   </p>
                   <div className="flex items-center gap-1.5 mt-1">
-                    <Clock className="w-3 h-3 text-[#8899a6]" />
-                    <span className="text-xs text-[#8899a6]">{item.time}</span>
+                    <Clock className="w-3 h-3 text-[#888888]" />
+                    <span className="text-xs text-[#888888]">{item.time}</span>
                   </div>
                 </div>
               </div>

@@ -31,15 +31,15 @@ export default function DirectionsPanel({
   }
 
   return (
-    <div className="bg-[#0f1419] h-full flex flex-col">
+    <div className="bg-[#000000] h-full flex flex-col">
       {/* Header */}
-      <div className="flex items-center gap-3 p-4 border-b border-[#2f3e50]">
+      <div className="flex items-center gap-3 p-4 border-b border-[#1a1a2e]">
         <button
           onClick={onBack}
-          className="p-1.5 rounded-lg hover:bg-[#1e2a3a] transition-colors"
+          className="p-1.5 rounded-lg hover:bg-[#111111] transition-colors"
           aria-label="Go back"
         >
-          <ArrowLeft className="w-5 h-5 text-[#8899a6]" />
+          <ArrowLeft className="w-5 h-5 text-[#888888]" />
         </button>
         <h2 className="text-sm font-bold text-white">Directions</h2>
       </div>
@@ -53,8 +53,8 @@ export default function DirectionsPanel({
               onClick={() => setMode(key)}
               className={`flex-1 flex flex-col items-center gap-1.5 py-3 rounded-xl text-xs font-medium transition-all ${
                 mode === key
-                  ? "bg-[#5ba3a8] text-white"
-                  : "bg-[#1e2a3a] text-[#8899a6] hover:bg-[#2a3a4e]"
+                  ? "bg-[#4169E1] text-white"
+                  : "bg-[#111111] text-[#888888] hover:bg-[#1a1a2e]"
               }`}
             >
               <Icon className="w-5 h-5" />
@@ -65,38 +65,38 @@ export default function DirectionsPanel({
 
         {/* Start point */}
         <div>
-          <label className="text-[10px] uppercase tracking-wider text-[#5b6f82] font-semibold mb-1.5 block">
+          <label className="text-[10px] uppercase tracking-wider text-[#666666] font-semibold mb-1.5 block">
             Start
           </label>
           <div className="flex gap-2">
-            <div className="flex-1 flex items-center gap-2 bg-[#1e2a3a] border border-[#2f3e50] rounded-xl px-3 py-2.5">
-              <MapPin className="w-4 h-4 text-[#5ba3a8] flex-shrink-0" />
+            <div className="flex-1 flex items-center gap-2 bg-[#111111] border border-[#1a1a2e] rounded-xl px-3 py-2.5">
+              <MapPin className="w-4 h-4 text-[#4169E1] flex-shrink-0" />
               <input
                 type="text"
                 value={startAddress}
                 onChange={(e) => setStartAddress(e.target.value)}
                 placeholder="Enter start address"
-                className="flex-1 bg-transparent text-sm text-white placeholder:text-[#5b6f82] outline-none min-w-0"
+                className="flex-1 bg-transparent text-sm text-white placeholder:text-[#666666] outline-none min-w-0"
               />
             </div>
             <button
               onClick={handleUseCurrentLocation}
-              className="flex-shrink-0 p-2.5 rounded-xl bg-[#1e2a3a] border border-[#2f3e50] hover:bg-[#2a3a4e] transition-colors"
+              className="flex-shrink-0 p-2.5 rounded-xl bg-[#111111] border border-[#1a1a2e] hover:bg-[#1a1a2e] transition-colors"
               aria-label="Use current location"
               title="Current Location"
             >
-              <LocateFixed className="w-4 h-4 text-[#5ba3a8]" />
+              <LocateFixed className="w-4 h-4 text-[#4169E1]" />
             </button>
           </div>
         </div>
 
         {/* End point */}
         <div>
-          <label className="text-[10px] uppercase tracking-wider text-[#5b6f82] font-semibold mb-1.5 block">
+          <label className="text-[10px] uppercase tracking-wider text-[#666666] font-semibold mb-1.5 block">
             Destination
           </label>
-          <div className="flex items-center gap-2 bg-[#1e2a3a] border border-[#2f3e50] rounded-xl px-3 py-2.5">
-            <Navigation className="w-4 h-4 text-[#5ba3a8] flex-shrink-0" />
+          <div className="flex items-center gap-2 bg-[#111111] border border-[#1a1a2e] rounded-xl px-3 py-2.5">
+            <Navigation className="w-4 h-4 text-[#4169E1] flex-shrink-0" />
             <span className="text-sm text-white truncate">{destination.name}</span>
           </div>
         </div>
@@ -104,7 +104,7 @@ export default function DirectionsPanel({
         {/* Start Route button */}
         <button
           onClick={() => onStartRoute(mode, startAddress)}
-          className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-[#5ba3a8] hover:bg-[#4a9298] text-sm font-semibold text-white transition-colors"
+          className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-[#4169E1] hover:bg-[#3457C9] text-sm font-semibold text-white transition-colors"
         >
           <Navigation className="w-4 h-4" />
           Start Route

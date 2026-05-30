@@ -17,7 +17,7 @@ export default function BridgeWorkCard({ task }: BridgeWorkCardProps) {
 
   return (
     <div
-      className="bg-[#1e2a3a] rounded-xl overflow-hidden border-l-4 transition-transform hover:scale-[1.01]"
+      className="bg-[#111111] rounded-xl overflow-hidden border-l-4 transition-transform hover:scale-[1.01]"
       style={{ borderLeftColor: "#F39C12" }}
     >
       <div className="p-4">
@@ -28,7 +28,7 @@ export default function BridgeWorkCard({ task }: BridgeWorkCardProps) {
 
         {/* Description */}
         {task.description && (
-          <p className="text-xs text-[#8899a6] leading-relaxed mb-2 line-clamp-2">
+          <p className="text-xs text-[#888888] leading-relaxed mb-2 line-clamp-2">
             {task.description}
           </p>
         )}
@@ -39,13 +39,13 @@ export default function BridgeWorkCard({ task }: BridgeWorkCardProps) {
           <span className="text-sm font-semibold text-[#F39C12]">
             {formattedPay}
           </span>
-          <span className="text-[10px] text-[#8899a6]">cash</span>
+          <span className="text-[10px] text-[#888888]">cash</span>
         </div>
 
         {/* Location */}
         <div className="flex items-start gap-1.5 mb-3">
-          <MapPin className="w-3.5 h-3.5 text-[#5ba3a8] mt-0.5 flex-shrink-0" />
-          <span className="text-xs text-[#8899a6]">{task.location}</span>
+          <MapPin className="w-3.5 h-3.5 text-[#4169E1] mt-0.5 flex-shrink-0" />
+          <span className="text-xs text-[#888888]">{task.location}</span>
         </div>
 
         {/* Category tag */}

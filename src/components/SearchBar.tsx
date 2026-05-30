@@ -82,12 +82,12 @@ export default function SearchBar({
   return (
     <div ref={containerRef} className="relative">
       <div
-        className={`flex items-center gap-2 rounded-full bg-[#1e2a3a] border border-[#2f3e50] transition-all duration-300 ease-in-out ${
+        className={`flex items-center gap-2 rounded-full bg-[#111111] border border-[#1a1a2e] transition-all duration-300 ease-in-out ${
           isExpanded ? "w-full px-3 py-2" : "w-10 h-10 justify-center cursor-pointer"
         }`}
         onClick={!isExpanded ? onExpand : undefined}
       >
-        <Search className="w-4 h-4 text-[#5ba3a8] flex-shrink-0" />
+        <Search className="w-4 h-4 text-[#4169E1] flex-shrink-0" />
 
         {isExpanded && (
           <>
@@ -97,15 +97,15 @@ export default function SearchBar({
               value={query}
               onChange={(e) => handleInputChange(e.target.value)}
               placeholder="Search locations..."
-              className="flex-1 bg-transparent text-sm text-white placeholder:text-[#5b6f82] outline-none min-w-0"
+              className="flex-1 bg-transparent text-sm text-white placeholder:text-[#666666] outline-none min-w-0"
             />
             {query && (
               <button
                 onClick={handleClear}
-                className="flex-shrink-0 p-0.5 rounded-full hover:bg-[#2a3a4e] transition-colors"
+                className="flex-shrink-0 p-0.5 rounded-full hover:bg-[#1a1a2e] transition-colors"
                 aria-label="Clear search"
               >
-                <X className="w-3.5 h-3.5 text-[#8899a6]" />
+                <X className="w-3.5 h-3.5 text-[#888888]" />
               </button>
             )}
           </>
@@ -114,19 +114,19 @@ export default function SearchBar({
 
       {/* Autocomplete dropdown */}
       {showDropdown && isExpanded && (
-        <div className="absolute top-full left-0 right-0 mt-1 bg-[#1e2a3a] border border-[#2f3e50] rounded-xl shadow-2xl overflow-hidden z-50 max-h-64 overflow-y-auto">
+        <div className="absolute top-full left-0 right-0 mt-1 bg-[#111111] border border-[#1a1a2e] rounded-xl shadow-2xl overflow-hidden z-50 max-h-64 overflow-y-auto">
           {suggestions.map((item) => (
             <button
               key={item.id}
               onClick={() => handleSelect(item.id)}
-              className="w-full flex items-start gap-3 px-4 py-3 text-left hover:bg-[#2a3a4e] transition-colors"
+              className="w-full flex items-start gap-3 px-4 py-3 text-left hover:bg-[#1a1a2e] transition-colors"
             >
-              <MapPin className="w-4 h-4 text-[#5ba3a8] mt-0.5 flex-shrink-0" />
+              <MapPin className="w-4 h-4 text-[#4169E1] mt-0.5 flex-shrink-0" />
               <div className="min-w-0">
                 <p className="text-sm text-white font-medium truncate">
                   {item.name}
                 </p>
-                <p className="text-xs text-[#8899a6] truncate">{item.address}</p>
+                <p className="text-xs text-[#888888] truncate">{item.address}</p>
               </div>
             </button>
           ))}
