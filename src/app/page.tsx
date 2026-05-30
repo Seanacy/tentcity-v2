@@ -2,13 +2,13 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import mapboxgl from "mapbox-gl";
-import { Navbar } from "@/components/Navbar";
-import { CategoryPills } from "@/components/CategoryPills";
-import { LocationCard } from "@/components/LocationCard";
-import { LocationDetail } from "@/components/LocationDetail";
-import { DirectionsPanel } from "@/components/DirectionsPanel";
-import { SearchBar } from "@/components/SearchBar";
-import { SupportButton } from "@/components/SupportButton";
+import Navbar from "@/components/Navbar";
+import CategoryPills from "@/components/CategoryPills";
+import LocationCard from "@/components/LocationCard";
+import LocationDetail from "@/components/LocationDetail";
+import DirectionsPanel from "@/components/DirectionsPanel";
+import SearchBar from "@/components/SearchBar";
+import SupportButton from "@/components/SupportButton";
 import BridgeWorkCard from "@/components/BridgeWorkCard";
 import { supabase } from "@/lib/supabase";
 import { fetchBridgeWorkTasks } from "@/lib/bridgework";
