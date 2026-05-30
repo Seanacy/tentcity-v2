@@ -75,7 +75,7 @@ export default function MapPage() {
           .in("category_id", selectedCategoryIds);
 
         if (junctionData) {
-          const ids = [...new Set(junctionData.map((j) => j.location_id))];
+          const ids = [...new Set((junctionData as { location_id: number }[]).map((j) => j.location_id))];
           if (ids.length === 0) {
             setLocations([]);
             setLoading(false);
