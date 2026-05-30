@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+:root {
+  --bg-primary: #0f1419;
+  --bg-secondary: #1a2332;
+  --bg-card: #1e2a3a;
+  --accent: #5ba3a8;
+  --accent-hover: #4a9298;
+  --text-primary: #ffffff;
+  --text-secondary: #8899a6;
+  --border: #2f3e50;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+/* Mapbox overrides */
+.mapboxgl-ctrl-logo {
+  display: none !important;
+}
+
+.mapboxgl-ctrl-attrib {
+  display: none !important;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
