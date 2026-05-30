@@ -215,7 +215,7 @@ export default function MapPage() {
             setShowDirections(false);
             setShowDetail(true);
           }}
-          onStartRoute={(s, e, m) => console.log("Route:", s, "→", e, m)}
+          onStartRoute={(mode, start) => console.log("Route:", mode, "→", start)}
         />
       );
     }
