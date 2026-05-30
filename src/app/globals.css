@@ -29,6 +29,11 @@ body {
   display: none !important;
 }
 
+.mapboxgl-ctrl-top-right {
+  top: 50% !important;
+  transform: translateY(-50%);
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
