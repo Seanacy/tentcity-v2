@@ -329,14 +329,19 @@ export default function MapPage() {
       </div>
 
       {/* Main: sidebar + map */}
-      <div className="flex-1 flex overflow-hidden">
-        <div className="w-full md:w-[380px] flex-shrink-0 bg-[#0f1419] border-r border-[#2f3e50] overflow-hidden flex flex-col">
-          {renderSidebar()}
+      <div className="flex-1 flex overflow-hidden relative">
+        {/* Map — always visible, full area */}
+        <div className="absolute inset-0 md:relative md:flex-1">
+          <div ref={mapContainerRef} className="w-full h-full" />
         </div>
-        <div className="hidden md:block flex-1 relative">
-          <div className="absolute inset-0">
-            <div ref={mapContainerRef} className="w-full h-full" />
+
+        {/* Sidebar — desktop: fixed left column; mobile: bottom sheet overlay */}
+        <div className="absolute bottom-0 left-0 right-0 h-[45vh] md:relative md:h-auto md:bottom-auto md:left-auto md:right-auto md:w-[380px] md:order-first flex-shrink-0 bg-[#0f1419]/95 backdrop-blur-sm md:bg-[#0f1419] border-t border-[#2f3e50] md:border-t-0 md:border-r rounded-t-2xl md:rounded-none overflow-hidden flex flex-col z-10">
+          {/* Drag handle — mobile only */}
+          <div className="flex justify-center py-2 md:hidden">
+            <div className="w-10 h-1 rounded-full bg-[#5ba3a8]" />
           </div>
+          {renderSidebar()}
         </div>
       </div>
 
