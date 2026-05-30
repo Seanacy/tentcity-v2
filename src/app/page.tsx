@@ -295,7 +295,7 @@ export default function MapPage() {
   };
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col pt-14">
       <Navbar />
 
       {/* Filter bar: search + category pills */}
