@@ -47,6 +47,7 @@ export default function MapPage() {
   >([]);
   const [loading, setLoading] = useState(true);
   const [bridgeWorkTasks, setBridgeWorkTasks] = useState<BridgeWorkTask[]>([]);
+  const [showListPanel, setShowListPanel] = useState(false);
 
   // Fetch categories
   useEffect(() => {
@@ -335,14 +336,43 @@ export default function MapPage() {
           <div ref={mapContainerRef} className="w-full h-full" />
         </div>
 
-        {/* Sidebar — desktop: fixed left column; mobile: bottom sheet overlay */}
-        <div className="absolute bottom-0 left-0 right-0 h-[45vh] md:relative md:h-auto md:bottom-auto md:left-auto md:right-auto md:w-[380px] md:order-first flex-shrink-0 bg-[#0f1419]/95 backdrop-blur-sm md:bg-[#0f1419] border-t border-[#2f3e50] md:border-t-0 md:border-r rounded-t-2xl md:rounded-none overflow-hidden flex flex-col z-10">
-          {/* Drag handle — mobile only */}
-          <div className="flex justify-center py-2 md:hidden">
-            <div className="w-10 h-1 rounded-full bg-[#5ba3a8]" />
-          </div>
+        {/* List toggle button — mobile only */}
+        <button
+          onClick={() => setShowListPanel((p) => !p)}
+          className="md:hidden absolute top-3 left-3 z-20 flex items-center gap-2 px-3 py-2 rounded-lg bg-[#0f1419]/90 backdrop-blur-sm border border-[#2f3e50] text-white text-sm shadow-lg"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          {locations.length} Locations
+        </button>
+
+        {/* Sidebar — desktop: always visible left column; mobile: slide-in panel */}
+        <div
+          className={`
+            absolute inset-y-0 left-0 w-[85vw] max-w-[380px] z-30
+            bg-[#0f1419] border-r border-[#2f3e50]
+            transform transition-transform duration-300 ease-in-out
+            ${showListPanel ? "translate-x-0" : "-translate-x-full"}
+            md:relative md:translate-x-0 md:w-[380px] md:max-w-none md:order-first
+            flex-shrink-0 overflow-hidden flex flex-col
+          `}
+        >
+          {/* Close button — mobile only */}
+          <button
+            onClick={() => setShowListPanel(false)}
+            className="md:hidden absolute top-3 right-3 z-10 p-1 rounded-full bg-[#1e2a3a] text-white"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
           {renderSidebar()}
         </div>
+
+        {/* Backdrop — mobile only, when panel is open */}
+        {showListPanel && (
+          <div
+            className="md:hidden absolute inset-0 bg-black/40 z-20"
+            onClick={() => setShowListPanel(false)}
+          />
+        )}
       </div>
 
       <SupportButton />
