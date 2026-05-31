@@ -302,14 +302,24 @@ export default function MapPage() {
             <div className="text-xs text-[#888888] mb-6">
               Status: <span className="text-[#22c55e] font-semibold">{selectedBWTask.status}</span>
             </div>
-            <a
-              href="https://bridgework.life"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-lg bg-[#F39C12] hover:bg-[#e08e0b] text-white font-semibold transition-colors"
-            >
-              Claim on BridgeWork →
-            </a>
+            <div className="flex flex-col gap-3">
+              <a
+                href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(selectedBWTask.location)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-lg bg-[#4169E1] hover:bg-[#3457C9] text-white font-semibold transition-colors"
+              >
+                📍 Get Directions
+              </a>
+              <a
+                href="https://bridgework.life"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-lg bg-[#F39C12] hover:bg-[#e08e0b] text-white font-semibold transition-colors"
+              >
+                Claim on BridgeWork →
+              </a>
+            </div>
           </div>
         </div>
       );
