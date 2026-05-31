@@ -173,14 +173,17 @@ export default function MapPage() {
       const cat = matchedCat?.name || loc.categories?.[0]?.name || "Resources";
       const color = CATEGORY_COLORS[cat] || "#5ba3a8";
 
+      const wrapper = document.createElement("div");
+      wrapper.style.cssText = "width:44px;height:44px;display:flex;align-items:center;justify-content:center;cursor:pointer";
       const el = document.createElement("div");
-      el.style.cssText = `width:24px;height:24px;border-radius:50%;background:${color};border:3px solid #fff;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.4)`;
+      el.style.cssText = `width:28px;height:28px;border-radius:50%;background:${color};border:3px solid #fff;pointer-events:none;box-shadow:0 2px 6px rgba(0,0,0,0.4)`;
+      wrapper.appendChild(el);
 
-      const marker = new mapboxgl.Marker({ element: el })
+      const marker = new mapboxgl.Marker({ element: wrapper })
         .setLngLat([Number(loc.longitude), Number(loc.latitude)])
         .addTo(mapRef.current!);
 
-      el.addEventListener("click", () => handleMarkerClick(loc));
+      wrapper.addEventListener("click", () => handleMarkerClick(loc));
       markersRef.current.push(marker);
     });
 
@@ -188,15 +191,18 @@ export default function MapPage() {
     bridgeWorkTasks.forEach((task) => {
       if (!task.latitude || !task.longitude) return;
 
+      const wrapper = document.createElement("div");
+      wrapper.style.cssText = "width:44px;height:44px;display:flex;align-items:center;justify-content:center;cursor:pointer";
       const el = document.createElement("div");
       el.style.cssText =
-        "width:24px;height:24px;border-radius:50%;background:#F39C12;border:3px solid #fff;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.4)";
+        "width:28px;height:28px;border-radius:50%;background:#F39C12;border:3px solid #fff;pointer-events:none;box-shadow:0 2px 6px rgba(0,0,0,0.4)";
+      wrapper.appendChild(el);
 
-      const marker = new mapboxgl.Marker({ element: el })
+      const marker = new mapboxgl.Marker({ element: wrapper })
         .setLngLat([Number(task.longitude), Number(task.latitude)])
         .addTo(mapRef.current!);
 
-      el.addEventListener("click", () => {
+      wrapper.addEventListener("click", () => {
         setSelectedBWTask(task);
         setSelectedLocation(null);
         setShowDetail(false);
