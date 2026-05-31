@@ -50,6 +50,7 @@ export default function MapPage() {
   >([]);
   const [loading, setLoading] = useState(true);
   const [bridgeWorkTasks, setBridgeWorkTasks] = useState<BridgeWorkTask[]>([]);
+  const [selectedBWTask, setSelectedBWTask] = useState<BridgeWorkTask | null>(null);
   const [showListPanel, setShowListPanel] = useState(false);
 
   // Fetch categories
@@ -195,12 +196,24 @@ export default function MapPage() {
         .setLngLat([Number(task.longitude), Number(task.latitude)])
         .addTo(mapRef.current!);
 
+      el.addEventListener("click", () => {
+        setSelectedBWTask(task);
+        setSelectedLocation(null);
+        setShowDetail(false);
+        mapRef.current?.flyTo({
+          center: [Number(task.longitude), Number(task.latitude)],
+          zoom: 15,
+          duration: 1000,
+        });
+      });
+
       markersRef.current.push(marker);
     });
   }, [locations, bridgeWorkTasks]);
 
   const handleMarkerClick = useCallback((loc: Location) => {
     setSelectedLocation(loc);
+    setSelectedBWTask(null);
     setShowDetail(true);
     setShowDirections(false);
     mapRef.current?.flyTo({
@@ -256,6 +269,49 @@ export default function MapPage() {
           }}
           onStartRoute={(mode, start) => console.log("Route:", mode, "→", start)}
         />
+      );
+    }
+
+    if (selectedBWTask) {
+      const formattedPay = new Intl.NumberFormat("en-US", {
+        style: "currency", currency: "USD", minimumFractionDigits: 0, maximumFractionDigits: 0,
+      }).format(selectedBWTask.pay);
+
+      return (
+        <div className="flex flex-col h-full">
+          <div className="flex items-center justify-between p-4 border-b border-[#1a1a2e]">
+            <button onClick={() => setSelectedBWTask(null)} className="text-[#888888] hover:text-white text-sm">
+              ← Back
+            </button>
+            <span className="text-xs font-semibold text-[#F39C12] uppercase tracking-wider">BridgeWork Task</span>
+          </div>
+          <div className="p-4 flex-1 overflow-y-auto">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-3 h-3 rounded-full bg-[#F39C12]" />
+              <span className="text-xs text-[#F39C12] font-semibold">Cash Task</span>
+            </div>
+            <h2 className="text-xl font-bold text-white mb-2">{selectedBWTask.title}</h2>
+            <div className="text-2xl font-bold text-[#F39C12] mb-4">{formattedPay} <span className="text-sm font-normal text-[#888888]">cash</span></div>
+            {selectedBWTask.description && (
+              <p className="text-sm text-[#cccccc] leading-relaxed mb-4">{selectedBWTask.description}</p>
+            )}
+            <div className="flex items-start gap-2 mb-4">
+              <span className="text-[#4169E1] mt-0.5">📍</span>
+              <span className="text-sm text-[#888888]">{selectedBWTask.location}</span>
+            </div>
+            <div className="text-xs text-[#888888] mb-6">
+              Status: <span className="text-[#22c55e] font-semibold">{selectedBWTask.status}</span>
+            </div>
+            <a
+              href="https://bridgework.life"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-lg bg-[#F39C12] hover:bg-[#e08e0b] text-white font-semibold transition-colors"
+            >
+              Claim on BridgeWork →
+            </a>
+          </div>
+        </div>
       );
     }
 
