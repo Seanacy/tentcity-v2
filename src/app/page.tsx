@@ -37,7 +37,7 @@ export default function MapPage() {
 
   const [locations, setLocations] = useState<Location[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>([]);
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>([3, 4]);
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
   const [showDetail, setShowDetail] = useState(false);
   const [showDirections, setShowDirections] = useState(false);

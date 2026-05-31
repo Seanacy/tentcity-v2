@@ -39,8 +39,8 @@ export default function CategoryPills({
                   }
                 : {
                     backgroundColor: "#000000",
-                    borderColor: cat.color,
-                    color: cat.color,
+                    borderColor: "#333333",
+                    color: "#ffffff",
                   }
             }
           >
