@@ -318,11 +318,22 @@ export default function MapPage() {
           }`}
         >
           <CategoryPills
-            categories={categories.map((c) => ({
-              id: c.id,
-              name: c.name,
-              color: CATEGORY_COLORS[c.name] || c.color,
-            }))}
+            categories={categories
+              .filter((c) => c.name !== "Encampment")
+              .sort((a, b) => {
+                const order = ["Shelter", "Food", "Employment"];
+                const ai = order.indexOf(a.name);
+                const bi = order.indexOf(b.name);
+                if (ai !== -1 && bi !== -1) return ai - bi;
+                if (ai !== -1) return -1;
+                if (bi !== -1) return 1;
+                return a.id - b.id;
+              })
+              .map((c) => ({
+                id: c.id,
+                name: c.name,
+                color: CATEGORY_COLORS[c.name] || c.color,
+              }))}
             selectedIds={selectedCategoryIds}
             onToggle={handleCategoryToggle}
           />
