@@ -2,18 +2,32 @@
 
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import { Menu, X, Map, Info, Users, PlusCircle, Shield, LogOut } from "lucide-react";
+import { useAuth } from "@/lib/auth";
+import {
+  Menu,
+  X,
+  Map,
+  Info,
+  Users,
+  PlusCircle,
+  Shield,
+  LogOut,
+  LogIn,
+} from "lucide-react";
 
-const navItems = [
+const publicItems = [
   { label: "Map", icon: Map, href: "/" },
   { label: "About", icon: Info, href: "/about" },
   { label: "Founders", icon: Users, href: "/founders" },
-  { label: "Add Location", icon: PlusCircle, href: "/add-location" },
-  { label: "Admin", icon: Shield, href: "/admin" },
-  { label: "Logout", icon: LogOut, href: "/logout" },
+];
+
+const adminItems = [
+  { label: "Add Location", icon: PlusCircle, href: "/dashboard/locations" },
+  { label: "Dashboard", icon: Shield, href: "/dashboard" },
 ];
 
 export default function Navbar() {
+  const { isAdmin, signOut, loading } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -28,6 +42,11 @@ export default function Navbar() {
     }
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [menuOpen]);
+
+  const navItems = [
+    ...publicItems,
+    ...(isAdmin ? adminItems : []),
+  ];
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 h-14 bg-[#000000] border-b border-[#1a1a2e] flex items-center justify-center px-4">
@@ -67,6 +86,32 @@ export default function Navbar() {
                 {item.label}
               </a>
             ))}
+
+            {/* Login or Logout */}
+            {!loading && (
+              isAdmin ? (
+                <button
+                  onClick={async () => {
+                    await signOut();
+                    setMenuOpen(false);
+                    window.location.href = "/";
+                  }}
+                  className="w-full flex items-center gap-3 px-4 py-3 text-sm text-[#cccccc] hover:bg-[#1a1a2e] hover:text-white transition-colors"
+                >
+                  <LogOut className="w-4 h-4 text-[#4169E1]" />
+                  Logout
+                </button>
+              ) : (
+                <a
+                  href="/login"
+                  onClick={() => setMenuOpen(false)}
+                  className="flex items-center gap-3 px-4 py-3 text-sm text-[#cccccc] hover:bg-[#1a1a2e] hover:text-white transition-colors"
+                >
+                  <LogIn className="w-4 h-4 text-[#4169E1]" />
+                  Login
+                </a>
+              )
+            )}
           </div>
         )}
       </div>

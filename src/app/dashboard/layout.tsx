@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useAuth } from "@/lib/auth";
 import {
   LayoutDashboard,
   MapPin,
@@ -32,7 +33,25 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const { isAdmin, loading, signOut, user } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    if (!loading && !isAdmin) {
+      router.push("/login");
+    }
+  }, [loading, isAdmin, router]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-[#000000]">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#4169E1]" />
+      </div>
+    );
+  }
+
+  if (!isAdmin) return null;
 
   return (
     <div className="flex h-screen bg-[#000000] text-white overflow-hidden">
@@ -102,13 +121,21 @@ export default function DashboardLayout({
         <div className="border-t border-[#1a1a2e] p-4">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-full bg-[#4169E1]/20 flex items-center justify-center flex-shrink-0">
-              <span className="text-xs font-bold text-[#4169E1]">AU</span>
+              <span className="text-xs font-bold text-[#4169E1]">
+                {(user?.email?.[0] || "A").toUpperCase()}
+              </span>
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-white truncate">Admin User</p>
-              <p className="text-xs text-[#888888] truncate">admin@tentcity.app</p>
+              <p className="text-sm font-medium text-white truncate">Admin</p>
+              <p className="text-xs text-[#888888] truncate">{user?.email}</p>
             </div>
-            <button className="p-1.5 rounded-lg hover:bg-[#1a1a2e] transition-colors flex-shrink-0">
+            <button
+              onClick={async () => {
+                await signOut();
+                router.push("/");
+              }}
+              className="p-1.5 rounded-lg hover:bg-[#1a1a2e] transition-colors flex-shrink-0"
+            >
               <LogOut className="w-4 h-4 text-[#888888]" />
             </button>
           </div>

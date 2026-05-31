@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
+import Providers from "@/components/Providers";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -35,7 +36,9 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="h-full bg-[#000000] text-white">{children}</body>
+      <body className="h-full bg-[#000000] text-white">
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }
