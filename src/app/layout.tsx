@@ -41,6 +41,7 @@ export default function RootLayout({
           href="https://api.mapbox.com/mapbox-gl-js/v3.12.0/mapbox-gl.css"
           rel="stylesheet"
         />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
       </head>
       <body className="h-full bg-[#000000] text-white">
