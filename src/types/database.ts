@@ -54,6 +54,18 @@ export interface User {
   created_at: string;
 }
 
+// Anonymized location tracking for analytics
+export interface LocationPing {
+  id: string;
+  anon_id: string;
+  lat: number;
+  lng: number;
+  accuracy: number | null;
+  app_source: "tentcity" | "bridgework" | "osaat";
+  session_id: string;
+  created_at: string;
+}
+
 // BridgeWork task type for Employment integration
 export interface BridgeWorkTask {
   id: string;
@@ -95,6 +107,11 @@ export interface Database {
         Row: User;
         Insert: Omit<User, "created_at">;
         Update: Partial<Omit<User, "id">>;
+      };
+      location_pings: {
+        Row: LocationPing;
+        Insert: Omit<LocationPing, "id" | "created_at">;
+        Update: Partial<Omit<LocationPing, "id">>;
       };
     };
   };
