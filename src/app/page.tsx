@@ -131,7 +131,11 @@ export default function MapPage() {
 
     locations.forEach((loc) => {
       if (!loc.latitude || !loc.longitude) return;
-      const cat = loc.categories?.[0]?.name || "Resources";
+      // Use the first category that matches a selected filter, else first category
+      const matchedCat = selectedCategoryIds.length > 0
+        ? loc.categories?.find((c: { id: number; name: string }) => selectedCategoryIds.includes(c.id))
+        : null;
+      const cat = matchedCat?.name || loc.categories?.[0]?.name || "Resources";
       const color = CATEGORY_COLORS[cat] || "#5ba3a8";
 
       const el = document.createElement("div");

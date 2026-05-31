@@ -9,6 +9,12 @@ export const metadata: Metadata = {
   title: "TentCity — Real-time resources for community care",
   description:
     "Find shelters, food, medical services, and community resources for people experiencing homelessness in Minneapolis.",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "TentCity",
+  },
   openGraph: {
     title: "TentCity",
     description: "Real-time resources & strategies for community care",
@@ -35,6 +41,7 @@ export default function RootLayout({
           href="https://api.mapbox.com/mapbox-gl-js/v3.12.0/mapbox-gl.css"
           rel="stylesheet"
         />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
       </head>
       <body className="h-full bg-[#000000] text-white">
         <Providers>{children}</Providers>
