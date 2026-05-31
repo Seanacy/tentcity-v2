@@ -117,6 +117,32 @@ export default function MapPage() {
     map.addControl(new mapboxgl.NavigationControl(), "top-right");
     mapRef.current = map;
 
+    // Request user location and center map
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const { latitude, longitude } = pos.coords;
+          map.flyTo({ center: [longitude, latitude], zoom: 13, duration: 1500 });
+
+          // Add pulsing blue dot for user location
+          const dot = document.createElement("div");
+          dot.style.cssText = `
+            width: 16px; height: 16px; border-radius: 50%;
+            background: #4169E1; border: 3px solid #fff;
+            box-shadow: 0 0 0 6px rgba(65,105,225,0.3);
+            animation: pulse 2s infinite;
+          `;
+          new mapboxgl.Marker({ element: dot })
+            .setLngLat([longitude, latitude])
+            .addTo(map);
+        },
+        () => {
+          // Permission denied or error — stay on Minneapolis default
+        },
+        { enableHighAccuracy: true, timeout: 10000 }
+      );
+    }
+
     return () => {
       map.remove();
       mapRef.current = null;

@@ -51,3 +51,10 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--accent);
 }
+
+/* Geolocation pulsing dot */
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(65,105,225,0.4); }
+  70% { box-shadow: 0 0 0 12px rgba(65,105,225,0); }
+  100% { box-shadow: 0 0 0 0 rgba(65,105,225,0); }
+}
