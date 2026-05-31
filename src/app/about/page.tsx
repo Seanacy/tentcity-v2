@@ -85,6 +85,21 @@ export default function AboutPage() {
             need -- shelters, food, medical care, and more -- all in one
             place, updated in real time.
           </p>
+
+          {/* Hero Video */}
+          <div className="relative w-full max-w-3xl mx-auto mb-8 rounded-xl overflow-hidden border border-[#1a1a2e] shadow-2xl">
+            <div className="relative w-full" style={{ paddingBottom: "56.25%" }}>
+              <iframe
+                className="absolute inset-0 w-full h-full"
+                src="https://www.youtube.com/embed/fXYu2G6IXcU?autoplay=1&mute=1&playsinline=1&controls=1&rel=0"
+                title="TentCity"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
+          </div>
+
           <a
             href="/"
             className="inline-flex items-center gap-2 px-6 py-3 bg-white text-[#000000] font-semibold rounded-lg hover:bg-gray-200 transition-colors"
