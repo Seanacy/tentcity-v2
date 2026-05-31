@@ -3,13 +3,13 @@
 import { useEffect, useRef, useState } from "react";
 
 export default function PullToRefresh() {
-  const [pulling, setPulling] = useState(false);
   const [pullDistance, setPullDistance] = useState(0);
   const [refreshing, setRefreshing] = useState(false);
   const startY = useRef(0);
+  const currentPull = useRef(0);
   const isPulling = useRef(false);
 
-  const THRESHOLD = 80; // pixels needed to trigger refresh
+  const THRESHOLD = 80;
 
   useEffect(() => {
     // Only enable in standalone PWA mode
@@ -20,31 +20,29 @@ export default function PullToRefresh() {
     if (!isStandalone) return;
 
     const handleTouchStart = (e: TouchEvent) => {
-      // Only trigger when scrolled to the very top
-      if (window.scrollY > 0) return;
-      // Don't trigger on the map (it has its own touch handling)
-      const target = e.target as HTMLElement;
-      if (target.closest(".mapboxgl-map")) return;
-
+      if (refreshing) return;
       startY.current = e.touches[0].clientY;
       isPulling.current = true;
     };
 
     const handleTouchMove = (e: TouchEvent) => {
-      if (!isPulling.current) return;
+      if (!isPulling.current || refreshing) return;
 
-      const currentY = e.touches[0].clientY;
-      const distance = currentY - startY.current;
+      const distance = e.touches[0].clientY - startY.current;
 
-      if (distance > 0 && window.scrollY === 0) {
-        // Apply resistance — the further you pull, the harder it gets
+      if (distance > 0) {
         const resistedDistance = Math.min(distance * 0.4, 120);
+        currentPull.current = resistedDistance;
         setPullDistance(resistedDistance);
-        setPulling(true);
 
         if (resistedDistance > 10) {
           e.preventDefault();
         }
+      } else {
+        // Scrolling up — cancel pull
+        isPulling.current = false;
+        currentPull.current = 0;
+        setPullDistance(0);
       }
     };
 
@@ -52,15 +50,14 @@ export default function PullToRefresh() {
       if (!isPulling.current) return;
       isPulling.current = false;
 
-      if (pullDistance >= THRESHOLD) {
+      if (currentPull.current >= THRESHOLD) {
         setRefreshing(true);
         setPullDistance(THRESHOLD);
-        // Reload after a brief visual feedback
         setTimeout(() => {
           window.location.reload();
         }, 400);
       } else {
-        setPulling(false);
+        currentPull.current = 0;
         setPullDistance(0);
       }
     };
@@ -74,20 +71,21 @@ export default function PullToRefresh() {
       document.removeEventListener("touchmove", handleTouchMove);
       document.removeEventListener("touchend", handleTouchEnd);
     };
-  }, [pullDistance]);
+  }, [refreshing]);
 
-  if (!pulling && !refreshing) return null;
+  if (pullDistance === 0 && !refreshing) return null;
 
   const progress = Math.min(pullDistance / THRESHOLD, 1);
 
   return (
     <div
-      className="fixed top-0 left-0 right-0 z-[9999] flex items-center justify-center pointer-events-none transition-transform duration-200"
-      style={{ transform: `translateY(${pullDistance - 40}px)` }}
+      className="fixed top-0 left-0 right-0 z-[9999] flex items-center justify-center pointer-events-none"
+      style={{
+        transform: `translateY(${pullDistance - 40}px)`,
+        transition: isPulling.current ? "none" : "transform 0.3s ease-out",
+      }}
     >
-      <div
-        className="w-9 h-9 rounded-full bg-[#111111] border border-[#333333] flex items-center justify-center shadow-lg"
-      >
+      <div className="w-9 h-9 rounded-full bg-[#111111] border border-[#333333] flex items-center justify-center shadow-lg">
         {refreshing ? (
           <div className="w-5 h-5 border-2 border-[#4169E1] border-t-transparent rounded-full animate-spin" />
         ) : (
@@ -104,7 +102,6 @@ export default function PullToRefresh() {
             style={{
               transform: `rotate(${progress * 180}deg)`,
               opacity: progress,
-              transition: "transform 0.1s",
             }}
           >
             <polyline points="23 4 23 10 17 10" />
