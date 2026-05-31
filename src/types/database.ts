@@ -83,6 +83,7 @@ export interface BridgeWorkTask {
 export interface Database {
   public: {
     Tables: {
+
       locations: {
         Row: Location;
         Insert: Omit<Location, "id" | "created_at" | "updated_at">;
@@ -114,5 +115,7 @@ export interface Database {
         Update: Partial<Omit<LocationPing, "id">>;
       };
     };
+    Views: Record<string, never>;
+    Functions: Record<string, never>;
   };
 }
