@@ -11,6 +11,8 @@ import SearchBar from "@/components/SearchBar";
 import SupportButton from "@/components/SupportButton";
 import BridgeWorkCard from "@/components/BridgeWorkCard";
 import { supabase } from "@/lib/supabase";
+import { trackLocation } from "@/lib/tracking";
+import { useAuth } from "@/lib/auth";
 import { fetchBridgeWorkTasks } from "@/lib/bridgework";
 import type { Location, Category, BridgeWorkTask } from "@/types/database";
 
@@ -34,6 +36,7 @@ export default function MapPage() {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const markersRef = useRef<mapboxgl.Marker[]>([]);
+  const { user } = useAuth();
 
   const [locations, setLocations] = useState<Location[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -135,6 +138,11 @@ export default function MapPage() {
           new mapboxgl.Marker({ element: dot })
             .setLngLat([longitude, latitude])
             .addTo(map);
+
+          // Track anonymized location if user is logged in
+          if (user?.id) {
+            trackLocation(user.id, latitude, longitude, pos.coords.accuracy, "tentcity");
+          }
         },
         () => {
           // Permission denied or error — stay on Minneapolis default
