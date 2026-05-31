@@ -1,4 +1,10 @@
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@supabase/supabase-js";
+
+// Untyped client — avoids Database generic constraint issues with supabase-js v2
+const trackingClient = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
 
 const SESSION_ID = crypto.randomUUID();
 
@@ -34,7 +40,7 @@ export async function trackLocation(
 ) {
   try {
     const anonId = await hashUserId(userId);
-    await supabase.from("location_pings").insert({
+    await trackingClient.from("location_pings").insert({
       anon_id: anonId,
       lat,
       lng,
