@@ -274,6 +274,7 @@ export default function MapPage() {
         setSelectedBWTask(task);
         setSelectedLocation(null);
         setShowDetail(false);
+        setShowListPanel(true);
         mapRef.current?.flyTo({
           center: [Number(task.longitude), Number(task.latitude)],
           zoom: 15,
@@ -290,6 +291,7 @@ export default function MapPage() {
     setSelectedBWTask(null);
     setShowDetail(true);
     setShowDirections(false);
+    setShowListPanel(true);
     mapRef.current?.flyTo({
       center: [Number(loc.longitude), Number(loc.latitude)],
       zoom: 15,
