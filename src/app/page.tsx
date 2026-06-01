@@ -191,6 +191,7 @@ export default function MapPage() {
     });
 
     map.addControl(new mapboxgl.NavigationControl(), "top-right");
+    map.doubleClickZoom.disable();
     mapRef.current = map;
 
     // Request user location and center map
