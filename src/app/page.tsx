@@ -52,6 +52,78 @@ export default function MapPage() {
   const [bridgeWorkTasks, setBridgeWorkTasks] = useState<BridgeWorkTask[]>([]);
   const [selectedBWTask, setSelectedBWTask] = useState<BridgeWorkTask | null>(null);
   const [showListPanel, setShowListPanel] = useState(false);
+  const [deepLinkProcessed, setDeepLinkProcessed] = useState(false);
+
+  // Deep link handler: ?needs=food,hygiene
+  useEffect(() => {
+    if (deepLinkProcessed || locations.length === 0 || categories.length === 0) return;
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const needs = params.get("needs");
+    if (!needs) return;
+
+    const needsList = needs.split(",").map((n) => n.trim().toLowerCase());
+
+    // Match needs to category IDs
+    const matchedCatIds = categories
+      .filter((c) => needsList.includes(c.name.toLowerCase()))
+      .map((c) => c.id);
+
+    if (matchedCatIds.length === 0) return;
+
+    // Select those categories on the map
+    setSelectedCategoryIds(matchedCatIds);
+
+    // Filter locations that have ANY of the matching categories
+    const matchingLocations = locations.filter((loc) =>
+      loc.categories?.some((c: { id: number }) => matchedCatIds.includes(c.id))
+    );
+
+    if (matchingLocations.length === 0) return;
+
+    // Grab GPS and find the closest match
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const userLat = pos.coords.latitude;
+          const userLng = pos.coords.longitude;
+
+          // Sort by distance
+          const withDistance = matchingLocations.map((loc) => {
+            const dLat = Number(loc.latitude) - userLat;
+            const dLng = Number(loc.longitude) - userLng;
+            const dist = Math.sqrt(dLat * dLat + dLng * dLng);
+            return { loc, dist };
+          });
+          withDistance.sort((a, b) => a.dist - b.dist);
+
+          // Auto-select the best (closest) match
+          const best = withDistance[0].loc;
+          setSelectedLocation(best);
+          setShowDetail(true);
+          mapRef.current?.flyTo({
+            center: [Number(best.longitude), Number(best.latitude)],
+            zoom: 15,
+            duration: 1000,
+          });
+        },
+        () => {
+          // GPS denied — just select the first match without distance sorting
+          const best = matchingLocations[0];
+          setSelectedLocation(best);
+          setShowDetail(true);
+          mapRef.current?.flyTo({
+            center: [Number(best.longitude), Number(best.latitude)],
+            zoom: 15,
+            duration: 1000,
+          });
+        },
+        { enableHighAccuracy: false, timeout: 10000 }
+      );
+    }
+
+    setDeepLinkProcessed(true);
+  }, [locations, categories, deepLinkProcessed]);
 
   // Fetch categories
   useEffect(() => {
