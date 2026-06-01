@@ -245,19 +245,14 @@ export default function MapPage() {
       const cat = matchedCat?.name || loc.categories?.[0]?.name || "Resources";
       const color = CATEGORY_COLORS[cat] || "#5ba3a8";
 
-      const wrapper = document.createElement("div");
-      wrapper.style.cssText = "width:44px;height:44px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;z-index:10";
       const el = document.createElement("div");
-      el.style.cssText = `width:28px;height:28px;border-radius:50%;background:${color};border:3px solid #fff;pointer-events:none;box-shadow:0 2px 6px rgba(0,0,0,0.4)`;
-      wrapper.appendChild(el);
+      el.style.cssText = `width:32px;height:32px;border-radius:50%;background:${color};border:3px solid #fff;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.4);touch-action:manipulation;-webkit-tap-highlight-color:transparent`;
 
-      const marker = new mapboxgl.Marker({ element: wrapper })
+      const marker = new mapboxgl.Marker({ element: el, anchor: "center" })
         .setLngLat([Number(loc.longitude), Number(loc.latitude)])
         .addTo(mapRef.current!);
 
-      const onTap = (e: Event) => { e.stopPropagation(); handleMarkerClick(loc); };
-      wrapper.addEventListener("click", onTap);
-      wrapper.addEventListener("touchend", (e) => { e.preventDefault(); e.stopPropagation(); handleMarkerClick(loc); }, { passive: false });
+      marker.getElement().addEventListener("click", (e) => { e.stopPropagation(); handleMarkerClick(loc); });
       markersRef.current.push(marker);
     });
 
@@ -265,18 +260,16 @@ export default function MapPage() {
     bridgeWorkTasks.forEach((task) => {
       if (!task.latitude || !task.longitude) return;
 
-      const wrapper = document.createElement("div");
-      wrapper.style.cssText = "width:44px;height:44px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;z-index:10";
       const el = document.createElement("div");
       el.style.cssText =
-        "width:28px;height:28px;border-radius:50%;background:#F39C12;border:3px solid #fff;pointer-events:none;box-shadow:0 2px 6px rgba(0,0,0,0.4)";
-      wrapper.appendChild(el);
+        "width:32px;height:32px;border-radius:50%;background:#F39C12;border:3px solid #fff;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.4);touch-action:manipulation;-webkit-tap-highlight-color:transparent";
 
-      const marker = new mapboxgl.Marker({ element: wrapper })
+      const marker = new mapboxgl.Marker({ element: el, anchor: "center" })
         .setLngLat([Number(task.longitude), Number(task.latitude)])
         .addTo(mapRef.current!);
 
-      const bwHandler = () => {
+      marker.getElement().addEventListener("click", (e) => {
+        e.stopPropagation();
         setSelectedBWTask(task);
         setSelectedLocation(null);
         setShowDetail(false);
@@ -285,9 +278,7 @@ export default function MapPage() {
           zoom: 15,
           duration: 1000,
         });
-      };
-      wrapper.addEventListener("click", bwHandler);
-      wrapper.addEventListener("touchend", (e) => { e.preventDefault(); e.stopPropagation(); bwHandler(); }, { passive: false });
+      });
 
       markersRef.current.push(marker);
     });
