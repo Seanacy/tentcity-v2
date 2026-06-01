@@ -18,7 +18,16 @@ export default function LocationDetail({
     {
       label: "Address",
       icon: <MapPin className="w-4 h-4 text-[#4169E1]" />,
-      value: location.address,
+      value: (
+        <a
+          href={`https://maps.apple.com/?daddr=${encodeURIComponent(location.address)}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[#4169E1] hover:underline"
+        >
+          {location.address}
+        </a>
+      ),
     },
     ...(location.phone
       ? [

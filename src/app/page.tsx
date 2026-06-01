@@ -373,7 +373,14 @@ export default function MapPage() {
             )}
             <div className="flex items-start gap-2 mb-4">
               <span className="text-[#4169E1] mt-0.5">📍</span>
-              <span className="text-sm text-[#888888]">{selectedBWTask.location}</span>
+              <a
+                href={`https://maps.apple.com/?daddr=${encodeURIComponent(selectedBWTask.location)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm text-[#4169E1] hover:underline"
+              >
+                {selectedBWTask.location}
+              </a>
             </div>
             <div className="text-xs text-[#888888] mb-6">
               Status: <span className="text-[#22c55e] font-semibold">{selectedBWTask.status}</span>
