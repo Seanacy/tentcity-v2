@@ -51,7 +51,7 @@ export default function RefinePanel({ filters, onChange }: RefinePanelProps) {
       {open && (
         <>
           <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
-          <div className="absolute top-full mt-2 left-0 z-50 w-72 rounded-xl border border-[#1a1a2e] bg-[#0a0a0a] shadow-2xl p-4">
+          <div className="absolute top-full mt-2 right-0 z-50 w-72 rounded-xl border border-[#1a1a2e] bg-[#0a0a0a] shadow-2xl p-4">
             <div className="flex items-center justify-between mb-3">
               <span className="text-sm font-semibold text-white">Refine results</span>
               <span className="text-[11px] text-[#888888]">Optional — helps narrow things down</span>
