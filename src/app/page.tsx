@@ -1,9 +1,11 @@
-"use client";
 
+"use client";
+ 
 import { useEffect, useRef, useState, useCallback } from "react";
 import mapboxgl from "mapbox-gl";
 import Navbar from "@/components/Navbar";
 import CategoryPills from "@/components/CategoryPills";
+import RefinePanel, { RefineFilters } from "@/components/RefinePanel";
 import LocationCard from "@/components/LocationCard";
 import LocationDetail from "@/components/LocationDetail";
 import DirectionsPanel from "@/components/DirectionsPanel";
@@ -15,11 +17,11 @@ import { trackLocation } from "@/lib/tracking";
 import { useAuth } from "@/lib/auth";
 import { fetchBridgeWorkTasks } from "@/lib/bridgework";
 import type { Location, Category, BridgeWorkTask } from "@/types/database";
-
+ 
 const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || "";
 const MINNEAPOLIS_CENTER: [number, number] = [-93.265, 44.978];
 const DEFAULT_ZOOM = 12;
-
+ 
 const CATEGORY_COLORS: Record<string, string> = {
   Encampment: "#297373",
   Community: "#5ba3a8",
@@ -31,16 +33,17 @@ const CATEGORY_COLORS: Record<string, string> = {
   Clothing: "#9B59B6",
   Employment: "#F39C12",
 };
-
+ 
 export default function MapPage() {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const markersRef = useRef<mapboxgl.Marker[]>([]);
   const { user } = useAuth();
-
+ 
   const [locations, setLocations] = useState<Location[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>([3, 4]);
+  const [refineFilters, setRefineFilters] = useState<RefineFilters>({ age: null, gender: null });
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
   const [showDetail, setShowDetail] = useState(false);
   const [showDirections, setShowDirections] = useState(false);
@@ -53,7 +56,7 @@ export default function MapPage() {
   const [selectedBWTask, setSelectedBWTask] = useState<BridgeWorkTask | null>(null);
   const [showListPanel, setShowListPanel] = useState(false);
   const [deepLinkProcessed, setDeepLinkProcessed] = useState(false);
-
+ 
   // Deep link handler: ?needs=food,hygiene
   useEffect(() => {
     if (deepLinkProcessed || locations.length === 0 || categories.length === 0) return;
@@ -61,33 +64,33 @@ export default function MapPage() {
     const params = new URLSearchParams(window.location.search);
     const needs = params.get("needs");
     if (!needs) return;
-
+ 
     const needsList = needs.split(",").map((n) => n.trim().toLowerCase());
-
+ 
     // Match needs to category IDs
     const matchedCatIds = categories
       .filter((c) => needsList.includes(c.name.toLowerCase()))
       .map((c) => c.id);
-
+ 
     if (matchedCatIds.length === 0) return;
-
+ 
     // Select those categories on the map
     setSelectedCategoryIds(matchedCatIds);
-
+ 
     // Filter locations that have ANY of the matching categories
     const matchingLocations = locations.filter((loc) =>
       loc.categories?.some((c: { id: number }) => matchedCatIds.includes(c.id))
     );
-
+ 
     if (matchingLocations.length === 0) return;
-
+ 
     // Grab GPS and find the closest match
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (pos) => {
           const userLat = pos.coords.latitude;
           const userLng = pos.coords.longitude;
-
+ 
           // Sort by distance
           const withDistance = matchingLocations.map((loc) => {
             const dLat = Number(loc.latitude) - userLat;
@@ -96,7 +99,7 @@ export default function MapPage() {
             return { loc, dist };
           });
           withDistance.sort((a, b) => a.dist - b.dist);
-
+ 
           // Auto-select the best (closest) match
           const best = withDistance[0].loc;
           setSelectedLocation(best);
@@ -121,10 +124,10 @@ export default function MapPage() {
         { enableHighAccuracy: false, timeout: 10000 }
       );
     }
-
+ 
     setDeepLinkProcessed(true);
   }, [locations, categories, deepLinkProcessed]);
-
+ 
   // Fetch categories
   useEffect(() => {
     async function fetchCategories() {
@@ -136,7 +139,7 @@ export default function MapPage() {
     }
     fetchCategories();
   }, []);
-
+ 
   // Fetch locations filtered by selected categories
   useEffect(() => {
     async function fetchLocations() {
@@ -144,13 +147,13 @@ export default function MapPage() {
       let query = supabase
         .from("locations")
         .select("*, categories(*), assets:location_assets(*)");
-
+ 
       if (selectedCategoryIds.length > 0) {
         const { data: junctionData } = await supabase
           .from("location_categories")
           .select("location_id")
           .in("category_id", selectedCategoryIds);
-
+ 
         if (junctionData) {
           const ids = [...new Set((junctionData as { location_id: number }[]).map((j) => j.location_id))];
           if (ids.length === 0) {
@@ -161,14 +164,14 @@ export default function MapPage() {
           query = query.in("id", ids);
         }
       }
-
+ 
       const { data } = await query.order("name");
       if (data) setLocations(data as Location[]);
       setLoading(false);
     }
     fetchLocations();
   }, [selectedCategoryIds]);
-
+ 
   // Fetch BridgeWork tasks when Employment category (id 9) is selected
   useEffect(() => {
     if (selectedCategoryIds.includes(9)) {
@@ -177,30 +180,44 @@ export default function MapPage() {
       setBridgeWorkTasks([]);
     }
   }, [selectedCategoryIds]);
-
+ 
+  // Apply optional age/gender refine filters on top of category-filtered locations.
+  // A listing with no gender_served / age_min / age_max on file is treated as open to everyone.
+  const visibleLocations = locations.filter((loc) => {
+    const l = loc as Location & { gender_served?: string | null; age_min?: number | null; age_max?: number | null };
+    if (refineFilters.gender && l.gender_served && l.gender_served !== refineFilters.gender) {
+      return false;
+    }
+    if (refineFilters.age !== null) {
+      if (l.age_min != null && refineFilters.age < l.age_min) return false;
+      if (l.age_max != null && refineFilters.age > l.age_max) return false;
+    }
+    return true;
+  });
+ 
   // Init map
   useEffect(() => {
     if (!mapContainerRef.current || mapRef.current) return;
     mapboxgl.accessToken = MAPBOX_TOKEN;
-
+ 
     const map = new mapboxgl.Map({
       container: mapContainerRef.current,
       style: "mapbox://styles/mapbox/dark-v11",
       center: MINNEAPOLIS_CENTER,
       zoom: DEFAULT_ZOOM,
     });
-
+ 
     map.addControl(new mapboxgl.NavigationControl(), "top-right");
     map.doubleClickZoom.disable();
     mapRef.current = map;
-
+ 
     // Request user location and center map
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         (pos) => {
           const { latitude, longitude } = pos.coords;
           map.flyTo({ center: [longitude, latitude], zoom: 13, duration: 1500 });
-
+ 
           // Add pulsing blue dot for user location
           const dot = document.createElement("div");
           dot.style.cssText = `
@@ -212,7 +229,7 @@ export default function MapPage() {
           new mapboxgl.Marker({ element: dot })
             .setLngLat([longitude, latitude])
             .addTo(map);
-
+ 
           // Track anonymized location if user is logged in
           if (user?.id) {
             trackLocation(user.id, latitude, longitude, pos.coords.accuracy, "tentcity");
@@ -224,20 +241,20 @@ export default function MapPage() {
         { enableHighAccuracy: true, timeout: 10000 }
       );
     }
-
+ 
     return () => {
       map.remove();
       mapRef.current = null;
     };
   }, []);
-
+ 
   // Sync markers
   useEffect(() => {
     if (!mapRef.current) return;
     markersRef.current.forEach((m) => m.remove());
     markersRef.current = [];
-
-    locations.forEach((loc) => {
+ 
+    visibleLocations.forEach((loc) => {
       if (!loc.latitude || !loc.longitude) return;
       // Use the first category that matches a selected filter, else first category
       const matchedCat = selectedCategoryIds.length > 0
@@ -245,30 +262,30 @@ export default function MapPage() {
         : null;
       const cat = matchedCat?.name || loc.categories?.[0]?.name || "Resources";
       const color = CATEGORY_COLORS[cat] || "#5ba3a8";
-
+ 
       const el = document.createElement("div");
       el.style.cssText = `width:32px;height:32px;border-radius:50%;background:${color};border:3px solid #fff;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.4);touch-action:manipulation;-webkit-tap-highlight-color:transparent`;
-
+ 
       const marker = new mapboxgl.Marker({ element: el, anchor: "center" })
         .setLngLat([Number(loc.longitude), Number(loc.latitude)])
         .addTo(mapRef.current!);
-
+ 
       marker.getElement().addEventListener("click", (e) => { e.stopPropagation(); handleMarkerClick(loc); });
       markersRef.current.push(marker);
     });
-
+ 
     // BridgeWork task markers (orange)
     bridgeWorkTasks.forEach((task) => {
       if (!task.latitude || !task.longitude) return;
-
+ 
       const el = document.createElement("div");
       el.style.cssText =
         "width:32px;height:32px;border-radius:50%;background:#F39C12;border:3px solid #fff;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.4);touch-action:manipulation;-webkit-tap-highlight-color:transparent";
-
+ 
       const marker = new mapboxgl.Marker({ element: el, anchor: "center" })
         .setLngLat([Number(task.longitude), Number(task.latitude)])
         .addTo(mapRef.current!);
-
+ 
       marker.getElement().addEventListener("click", (e) => {
         e.stopPropagation();
         setSelectedBWTask(task);
@@ -281,11 +298,11 @@ export default function MapPage() {
           duration: 1000,
         });
       });
-
+ 
       markersRef.current.push(marker);
     });
-  }, [locations, bridgeWorkTasks]);
-
+  }, [visibleLocations, bridgeWorkTasks]);
+ 
   const handleMarkerClick = useCallback((loc: Location) => {
     setSelectedLocation(loc);
     setSelectedBWTask(null);
@@ -298,13 +315,13 @@ export default function MapPage() {
       duration: 1000,
     });
   }, []);
-
+ 
   const handleCategoryToggle = (id: number) => {
     setSelectedCategoryIds((prev) =>
       prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id]
     );
   };
-
+ 
   // SEARCH — database only
   const handleSearch = async (term: string) => {
     if (term.length < 2) {
@@ -318,7 +335,7 @@ export default function MapPage() {
       .limit(8);
     if (data) setSearchSuggestions(data);
   };
-
+ 
   const handleSearchSelect = async (id: number) => {
     let loc = locations.find((l) => l.id === id);
     if (!loc) {
@@ -333,7 +350,7 @@ export default function MapPage() {
     setIsSearchExpanded(false);
     setSearchSuggestions([]);
   };
-
+ 
   const renderSidebar = () => {
     if (showDirections && selectedLocation) {
       return (
@@ -347,12 +364,12 @@ export default function MapPage() {
         />
       );
     }
-
+ 
     if (selectedBWTask) {
       const formattedPay = new Intl.NumberFormat("en-US", {
         style: "currency", currency: "USD", minimumFractionDigits: 0, maximumFractionDigits: 0,
       }).format(selectedBWTask.pay);
-
+ 
       return (
         <div className="flex flex-col h-full">
           <div className="flex items-center justify-between p-4 border-b border-[#1a1a2e]">
@@ -407,7 +424,7 @@ export default function MapPage() {
         </div>
       );
     }
-
+ 
     if (showDetail && selectedLocation) {
       return (
         <LocationDetail
@@ -423,9 +440,9 @@ export default function MapPage() {
         />
       );
     }
-
-    const totalResults = locations.length + bridgeWorkTasks.length;
-
+ 
+    const totalResults = visibleLocations.length + bridgeWorkTasks.length;
+ 
     return (
       <div className="flex flex-col h-full">
         <div className="p-3 border-b border-[#1a1a2e] flex items-center justify-between">
@@ -437,13 +454,13 @@ export default function MapPage() {
             <div className="flex items-center justify-center h-32">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#4169E1]" />
             </div>
-          ) : locations.length === 0 && bridgeWorkTasks.length === 0 ? (
+          ) : visibleLocations.length === 0 && bridgeWorkTasks.length === 0 ? (
             <div className="p-6 text-center text-[#888888]">
               No locations found.
             </div>
           ) : (
             <>
-              {locations.map((loc) => (
+              {visibleLocations.map((loc) => (
                 <LocationCard
                   key={loc.id}
                   location={loc}
@@ -454,7 +471,7 @@ export default function MapPage() {
                   }}
                 />
               ))}
-
+ 
               {bridgeWorkTasks.length > 0 && (
                 <>
                   <div className="px-4 py-2 mt-2 border-t border-[#1a1a2e]">
@@ -481,11 +498,11 @@ export default function MapPage() {
       </div>
     );
   };
-
+ 
   return (
     <div className="h-full flex flex-col pt-14">
       <Navbar />
-
+ 
       {/* Filter bar: search + category pills — floats over map on mobile */}
       <div className="flex items-center gap-2 px-3 py-2 bg-transparent md:bg-[#000000] md:border-b md:border-[#1a1a2e] overflow-visible absolute md:relative top-14 md:top-auto left-0 right-0 z-30">
         <SearchBar
@@ -525,24 +542,25 @@ export default function MapPage() {
             onToggle={handleCategoryToggle}
           />
         </div>
+        <RefinePanel filters={refineFilters} onChange={setRefineFilters} />
       </div>
-
+ 
       {/* Main: sidebar + map */}
       <div className="flex-1 flex overflow-hidden relative">
         {/* Map — always visible, full area */}
         <div className="absolute inset-0 md:relative md:flex-1">
           <div ref={mapContainerRef} className="w-full h-full" />
         </div>
-
+ 
         {/* List toggle button — mobile only */}
         <button
           onClick={() => setShowListPanel((p) => !p)}
           className="md:hidden absolute top-12 left-3 z-20 flex items-center gap-2 px-3 py-2 rounded-lg bg-[#000000]/90 backdrop-blur-sm border border-[#1a1a2e] text-white text-sm shadow-lg"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-          {locations.length} Locations
+          {visibleLocations.length} Locations
         </button>
-
+ 
         {/* Sidebar — desktop: always visible left column; mobile: slide-in panel */}
         <div
           className={`
@@ -563,7 +581,7 @@ export default function MapPage() {
           </button>
           {renderSidebar()}
         </div>
-
+ 
         {/* Backdrop — mobile only, when panel is open */}
         {showListPanel && (
           <div
@@ -572,7 +590,7 @@ export default function MapPage() {
           />
         )}
       </div>
-
+ 
       <SupportButton />
     </div>
   );
