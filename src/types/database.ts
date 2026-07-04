@@ -14,13 +14,16 @@ export interface Location {
   additional_info: string | null;
   youtube_url: string | null;
   image_url: string | null;
+  gender_served: string | null;
+  age_min: number | null;
+  age_max: number | null;
   user_id: string;
   created_at: string;
   updated_at: string;
   categories?: Category[];
   assets?: LocationAsset[];
 }
-
+ 
 export interface Category {
   id: number;
   name: string;
@@ -32,7 +35,7 @@ export interface Category {
   created_at: string;
   updated_at: string;
 }
-
+ 
 export interface LocationAsset {
   id: number;
   location_id: number;
@@ -40,12 +43,12 @@ export interface LocationAsset {
   type: string;
   created_at: string;
 }
-
+ 
 export interface LocationCategory {
   location_id: number;
   category_id: number;
 }
-
+ 
 export interface User {
   id: string;
   email: string;
@@ -53,7 +56,7 @@ export interface User {
   role: "admin" | "user";
   created_at: string;
 }
-
+ 
 // Anonymized location tracking for analytics
 export interface LocationPing {
   id: string;
@@ -65,7 +68,7 @@ export interface LocationPing {
   session_id: string;
   created_at: string;
 }
-
+ 
 // BridgeWork task type for Employment integration
 export interface BridgeWorkTask {
   id: string;
@@ -79,11 +82,11 @@ export interface BridgeWorkTask {
   status: string;
   created_at: string;
 }
-
+ 
 export interface Database {
   public: {
     Tables: {
-
+ 
       locations: {
         Row: Location;
         Insert: Omit<Location, "id" | "created_at" | "updated_at">;
