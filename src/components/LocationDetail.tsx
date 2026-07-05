@@ -11,7 +11,6 @@ import {
   Tag,
   Navigation,
   Heart,
-  Bell,
   Flag,
 } from "lucide-react";
 import type { Location } from "@/types/database";
@@ -19,8 +18,6 @@ import { useAuth } from "@/lib/auth";
 import {
   getFavoriteIds,
   toggleFavorite,
-  getSubscribedIds,
-  toggleSubscribe,
   submitFlag,
 } from "@/lib/locationActions";
 
@@ -37,7 +34,6 @@ export default function LocationDetail({
 }: LocationDetailProps) {
   const { user } = useAuth();
   const [favorited, setFavorited] = useState(false);
-  const [subscribed, setSubscribed] = useState(false);
   const [showFlagForm, setShowFlagForm] = useState(false);
   const [flagReason, setFlagReason] = useState("");
   const [flagSubmitted, setFlagSubmitted] = useState(false);
@@ -46,18 +42,13 @@ export default function LocationDetail({
   useEffect(() => {
     if (!user) {
       setFavorited(false);
-      setSubscribed(false);
       return;
     }
     let cancelled = false;
     (async () => {
-      const [favIds, subIds] = await Promise.all([
-        getFavoriteIds(user.id),
-        getSubscribedIds(user.id),
-      ]);
+      const favIds = await getFavoriteIds(user.id);
       if (cancelled) return;
       setFavorited(favIds.has(location.id));
-      setSubscribed(subIds.has(location.id));
     })();
     return () => {
       cancelled = true;
@@ -72,17 +63,6 @@ export default function LocationDetail({
     setBusy(true);
     await toggleFavorite(user.id, location.id, favorited);
     setFavorited((f) => !f);
-    setBusy(false);
-  };
-
-  const handleSubscribeClick = async () => {
-    if (!user) {
-      window.location.href = "/login";
-      return;
-    }
-    setBusy(true);
-    await toggleSubscribe(user.id, location.id, subscribed);
-    setSubscribed((s) => !s);
     setBusy(false);
   };
 
@@ -235,18 +215,6 @@ export default function LocationDetail({
         >
           <Heart className="w-3.5 h-3.5" fill={favorited ? "currentColor" : "none"} />
           {favorited ? "Saved" : "Save"}
-        </button>
-        <button
-          onClick={handleSubscribeClick}
-          disabled={busy}
-          className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
-            subscribed
-              ? "bg-[#4169E1]/20 text-[#4169E1]"
-              : "bg-[#111111] text-[#888888] hover:bg-[#1a1a2e]"
-          }`}
-        >
-          <Bell className="w-3.5 h-3.5" fill={subscribed ? "currentColor" : "none"} />
-          {subscribed ? "Notified" : "Notify Me"}
         </button>
         <button
           onClick={handleFlagClick}
