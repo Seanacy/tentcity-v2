@@ -117,8 +117,64 @@ export interface Database {
         Insert: Omit<LocationPing, "id" | "created_at">;
         Update: Partial<Omit<LocationPing, "id">>;
       };
+      location_favorites: {
+        Row: LocationFavorite;
+        Insert: Omit<LocationFavorite, "id" | "created_at">;
+        Update: Partial<Omit<LocationFavorite, "id">>;
+      };
+      location_subscriptions: {
+        Row: LocationSubscription;
+        Insert: Omit<LocationSubscription, "id" | "created_at">;
+        Update: Partial<Omit<LocationSubscription, "id">>;
+      };
+      location_flags: {
+        Row: LocationFlag;
+        Insert: Omit<LocationFlag, "id" | "created_at" | "status">;
+        Update: Partial<Omit<LocationFlag, "id">>;
+      };
+      location_suggestions: {
+        Row: LocationSuggestion;
+        Insert: Omit<LocationSuggestion, "id" | "created_at" | "status">;
+        Update: Partial<Omit<LocationSuggestion, "id">>;
+      };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;
   };
+}
+
+export interface LocationFavorite {
+  id: string;
+  user_id: string;
+  location_id: number;
+  created_at: string;
+}
+
+export interface LocationSubscription {
+  id: string;
+  user_id: string;
+  location_id: number;
+  created_at: string;
+}
+
+export interface LocationFlag {
+  id: string;
+  user_id: string;
+  location_id: number;
+  reason: string | null;
+  status: string;
+  created_at: string;
+}
+
+export interface LocationSuggestion {
+  id: string;
+  submitted_by: string | null;
+  name: string;
+  address: string | null;
+  description: string | null;
+  category: string | null;
+  phone: string | null;
+  hours: string | null;
+  status: string;
+  created_at: string;
 }

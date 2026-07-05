@@ -13,10 +13,12 @@ import {
   Shield,
   LogOut,
   LogIn,
+  MessageSquarePlus,
 } from "lucide-react";
 
 const publicItems = [
   { label: "Map", icon: Map, href: "/" },
+  { label: "Suggest a Location", icon: MessageSquarePlus, href: "/suggest" },
   { label: "About", icon: Info, href: "/about" },
   { label: "Founders", icon: Users, href: "/founders" },
 ];
