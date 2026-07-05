@@ -29,7 +29,7 @@ const adminItems = [
 ];
 
 export default function Navbar() {
-  const { isAdmin, signOut, loading } = useAuth();
+  const { user, isAdmin, signOut, loading } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -89,9 +89,9 @@ export default function Navbar() {
               </a>
             ))}
 
-            {/* Login or Logout */}
+            {/* Login or Logout — reflects actual sign-in state, not just admin */}
             {!loading && (
-              isAdmin ? (
+              user ? (
                 <button
                   onClick={async () => {
                     await signOut();
