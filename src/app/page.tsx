@@ -15,6 +15,7 @@ import { supabase } from "@/lib/supabase";
 import { trackLocation, getAnonDeviceId } from "@/lib/tracking";
 import { useAuth } from "@/lib/auth";
 import { fetchBridgeWorkTasks } from "@/lib/bridgework";
+import { fuzzTaskLocation } from "@/lib/fuzz";
 import type { Location, Category, BridgeWorkTask } from "@/types/database";
  
 const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || "";
@@ -275,18 +276,25 @@ export default function MapPage() {
       markersRef.current.push(marker);
     });
  
-    // BridgeWork task markers (orange)
+    // BridgeWork task markers (orange) — pin position is fuzzed 200-500m
+    // for signed-out visitors so the real address/location isn't exposed via the map.
     bridgeWorkTasks.forEach((task) => {
       if (!task.latitude || !task.longitude) return;
- 
+
+      const realLat = Number(task.latitude);
+      const realLng = Number(task.longitude);
+      const pin = user
+        ? { latitude: realLat, longitude: realLng }
+        : fuzzTaskLocation(task.id, realLat, realLng);
+
       const el = document.createElement("div");
       el.style.cssText =
         "width:32px;height:32px;border-radius:50%;background:#F39C12;border:3px solid #fff;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.4);touch-action:manipulation;-webkit-tap-highlight-color:transparent";
- 
+
       const marker = new mapboxgl.Marker({ element: el, anchor: "center" })
-        .setLngLat([Number(task.longitude), Number(task.latitude)])
+        .setLngLat([pin.longitude, pin.latitude])
         .addTo(mapRef.current!);
- 
+
       marker.getElement().addEventListener("click", (e) => {
         e.stopPropagation();
         setSelectedBWTask(task);
@@ -294,15 +302,15 @@ export default function MapPage() {
         setShowDetail(false);
         setShowListPanel(true);
         mapRef.current?.flyTo({
-          center: [Number(task.longitude), Number(task.latitude)],
+          center: [pin.longitude, pin.latitude],
           zoom: 15,
           duration: 1000,
         });
       });
- 
+
       markersRef.current.push(marker);
     });
-  }, [visibleLocations, bridgeWorkTasks]);
+  }, [visibleLocations, bridgeWorkTasks, user]);
  
   const handleMarkerClick = useCallback((loc: Location) => {
     setSelectedLocation(loc);
