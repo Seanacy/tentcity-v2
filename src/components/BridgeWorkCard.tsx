@@ -1,13 +1,14 @@
 "use client";
 
-import { MapPin, DollarSign, ExternalLink } from "lucide-react";
+import { MapPin, DollarSign, ExternalLink, Lock } from "lucide-react";
 import type { BridgeWorkTask } from "@/types/database";
 
 interface BridgeWorkCardProps {
   task: BridgeWorkTask;
+  signedIn: boolean;
 }
 
-export default function BridgeWorkCard({ task }: BridgeWorkCardProps) {
+export default function BridgeWorkCard({ task, signedIn }: BridgeWorkCardProps) {
   const formattedPay = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
@@ -42,10 +43,14 @@ export default function BridgeWorkCard({ task }: BridgeWorkCardProps) {
           <span className="text-[10px] text-[#888888]">cash</span>
         </div>
 
-        {/* Location */}
+        {/* Location — hidden until signed in */}
         <div className="flex items-start gap-1.5 mb-3">
           <MapPin className="w-3.5 h-3.5 text-[#4169E1] mt-0.5 flex-shrink-0" />
-          <span className="text-xs text-[#888888]">{task.location}</span>
+          {signedIn ? (
+            <span className="text-xs text-[#888888]">{task.location}</span>
+          ) : (
+            <span className="text-xs text-[#666666] italic">Sign in to see the location</span>
+          )}
         </div>
 
         {/* Category tag */}
@@ -63,15 +68,25 @@ export default function BridgeWorkCard({ task }: BridgeWorkCardProps) {
         </div>
 
         {/* Action */}
-        <a
-          href={`https://bridge-work-omega.vercel.app`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center justify-center gap-1.5 w-full px-3 py-2 rounded-lg bg-[#F39C12] hover:bg-[#e08e0b] text-xs text-white font-medium transition-colors"
-        >
-          <ExternalLink className="w-3.5 h-3.5" />
-          View on BridgeWork
-        </a>
+        {signedIn ? (
+          <a
+            href={`https://bridge-work-omega.vercel.app`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-1.5 w-full px-3 py-2 rounded-lg bg-[#F39C12] hover:bg-[#e08e0b] text-xs text-white font-medium transition-colors"
+          >
+            <ExternalLink className="w-3.5 h-3.5" />
+            View on BridgeWork
+          </a>
+        ) : (
+          <a
+            href="/login"
+            className="flex items-center justify-center gap-1.5 w-full px-3 py-2 rounded-lg bg-[#F39C12] hover:bg-[#e08e0b] text-xs text-white font-medium transition-colors"
+          >
+            <Lock className="w-3.5 h-3.5" />
+            Sign in to view details
+          </a>
+        )}
       </div>
     </div>
   );

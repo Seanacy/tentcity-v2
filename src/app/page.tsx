@@ -389,29 +389,45 @@ export default function MapPage() {
             {selectedBWTask.description && (
               <p className="text-sm text-[#cccccc] leading-relaxed mb-4">{selectedBWTask.description}</p>
             )}
-            <div className="flex items-start gap-2 mb-4">
-              <span className="text-[#4169E1] mt-0.5">📍</span>
-              <a
-                href={`https://maps.apple.com/?daddr=${encodeURIComponent(selectedBWTask.location)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm text-[#4169E1] hover:underline"
-              >
-                {selectedBWTask.location}
-              </a>
-            </div>
+            {user ? (
+              <div className="flex items-start gap-2 mb-4">
+                <span className="text-[#4169E1] mt-0.5">📍</span>
+                <a
+                  href={`https://maps.apple.com/?daddr=${encodeURIComponent(selectedBWTask.location)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-[#4169E1] hover:underline"
+                >
+                  {selectedBWTask.location}
+                </a>
+              </div>
+            ) : (
+              <div className="flex items-start gap-2 mb-4">
+                <span className="text-[#666666] mt-0.5">📍</span>
+                <span className="text-sm text-[#666666] italic">Sign in to see the exact location</span>
+              </div>
+            )}
             <div className="text-xs text-[#888888] mb-6">
               Status: <span className="text-[#22c55e] font-semibold">{selectedBWTask.status}</span>
             </div>
             <div className="flex flex-col gap-3">
-              <a
-                href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(selectedBWTask.location)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-lg bg-[#4169E1] hover:bg-[#3457C9] text-white font-semibold transition-colors"
-              >
-                📍 Get Directions
-              </a>
+              {user ? (
+                <a
+                  href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(selectedBWTask.location)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-lg bg-[#4169E1] hover:bg-[#3457C9] text-white font-semibold transition-colors"
+                >
+                  📍 Get Directions
+                </a>
+              ) : (
+                <a
+                  href="/login"
+                  className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-lg bg-[#4169E1] hover:bg-[#3457C9] text-white font-semibold transition-colors"
+                >
+                  Sign in to get directions
+                </a>
+              )}
               <a
                 href="https://bridgework.life"
                 target="_blank"
@@ -488,7 +504,7 @@ export default function MapPage() {
                   </div>
                   {bridgeWorkTasks.map((task) => (
                     <div key={task.id} className="px-2 py-1">
-                      <BridgeWorkCard task={task} />
+                      <BridgeWorkCard task={task} signedIn={!!user} />
                     </div>
                   ))}
                 </>
