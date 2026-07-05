@@ -8,6 +8,29 @@ const trackingClient = createClient(
 
 const SESSION_ID = crypto.randomUUID();
 
+const ANON_DEVICE_KEY = "tentcity_anon_device_id";
+
+/**
+ * Get a stable per-browser anonymous ID for visitors who aren't signed in.
+ * Generated once and stored in localStorage so the same device keeps the
+ * same (hashed) anon_id across visits, just like a signed-in user would.
+ */
+export function getAnonDeviceId(): string {
+  if (typeof window === "undefined") return crypto.randomUUID();
+  try {
+    let id = window.localStorage.getItem(ANON_DEVICE_KEY);
+    if (!id) {
+      id = crypto.randomUUID();
+      window.localStorage.setItem(ANON_DEVICE_KEY, id);
+    }
+    return id;
+  } catch {
+    // localStorage unavailable (private browsing, etc.) — fall back to a
+    // session-only ID rather than skipping tracking entirely.
+    return crypto.randomUUID();
+  }
+}
+
 /**
  * Hash a user ID into an anonymous identifier.
  * SHA-256 is one-way — can't be reversed to find the user.

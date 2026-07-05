@@ -12,7 +12,7 @@ import SearchBar from "@/components/SearchBar";
 import SupportButton from "@/components/SupportButton";
 import BridgeWorkCard from "@/components/BridgeWorkCard";
 import { supabase } from "@/lib/supabase";
-import { trackLocation } from "@/lib/tracking";
+import { trackLocation, getAnonDeviceId } from "@/lib/tracking";
 import { useAuth } from "@/lib/auth";
 import { fetchBridgeWorkTasks } from "@/lib/bridgework";
 import type { Location, Category, BridgeWorkTask } from "@/types/database";
@@ -228,11 +228,13 @@ export default function MapPage() {
           new mapboxgl.Marker({ element: dot })
             .setLngLat([longitude, latitude])
             .addTo(map);
- 
-          // Track anonymized location if user is logged in
-          if (user?.id) {
-            trackLocation(user.id, latitude, longitude, pos.coords.accuracy, "tentcity");
-          }
+
+          // Track anonymized location for every visitor — signed-in users
+          // use their real (hashed) ID, everyone else uses a stable
+          // per-browser anonymous ID, so TentCity's pings land in the same
+          // shared table as BridgeWork's and OSAAT's signed-in-user pings.
+          const idForTracking = user?.id || getAnonDeviceId();
+          trackLocation(idForTracking, latitude, longitude, pos.coords.accuracy, "tentcity");
         },
         () => {
           // Permission denied or error — stay on Minneapolis default
