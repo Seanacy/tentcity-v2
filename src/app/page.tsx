@@ -1,6 +1,6 @@
 "use client";
  
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import mapboxgl from "mapbox-gl";
 import Navbar from "@/components/Navbar";
 import CategoryPills from "@/components/CategoryPills";
@@ -183,7 +183,7 @@ export default function MapPage() {
  
   // Apply optional age/gender refine filters on top of category-filtered locations.
   // A listing with no gender_served / age_min / age_max on file is treated as open to everyone.
-  const visibleLocations = locations.filter((loc) => {
+  const visibleLocations = useMemo(() => locations.filter((loc) => {
     const l = loc as Location & { gender_served?: string | null; age_min?: number | null; age_max?: number | null };
     if (refineFilters.gender && l.gender_served && l.gender_served !== refineFilters.gender) {
       return false;
@@ -193,7 +193,7 @@ export default function MapPage() {
       if (l.age_max != null && refineFilters.age > l.age_max) return false;
     }
     return true;
-  });
+  }), [locations, refineFilters]);
  
   // Init map
   useEffect(() => {
